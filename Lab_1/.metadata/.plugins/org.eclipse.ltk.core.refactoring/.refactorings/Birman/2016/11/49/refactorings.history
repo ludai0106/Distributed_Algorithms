@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Encapsulate field &apos;Process.registry&apos; in &apos;Process&apos;&#x0A;- Original project: &apos;Birman&apos;&#x0A;- Original element: &apos;Process.registry&apos;&#x0A;- Getter method name: &apos;getRegistry&apos;&#x0A;- Setter method name: &apos;setRegistry&apos;&#x0A;- Field visibility: &apos;public&apos;&#x0A;- Use getter and setter methods in declaring type" comments="false" declaring="true" description="Encapsulate field &apos;registry&apos;" flags="589830" getter="getRegistry" id="org.eclipse.jdt.ui.self.encapsulate" input="/src&lt;{Process.java[Process^registry" insertion="7" setter="setRegistry" stamp="1480362348329" version="1.0" visibility="1"/>
+</session>

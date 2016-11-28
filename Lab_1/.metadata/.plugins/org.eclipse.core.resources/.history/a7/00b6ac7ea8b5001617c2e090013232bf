@@ -1,0 +1,51 @@
+import java.util.Random;
+
+public class Birman implements Runnable{
+	private Process currentProcess;
+	private double startTime;
+	private int index;
+	private int messageNum;
+	public Birman(Process process, double time, int index){
+		this.currentProcess=process;
+		this.startTime=time;
+		this.index=index;
+	}
+
+
+	@Override
+	public void run() {
+		try{
+			String[] remoteIds = currentProcess.getRegistry().list();
+			while(true & (System.currentTimeMillis() - startTime) < 20000){
+				currentProcess.getClock().increase(index);
+				Clock currentClock = currentProcess.getClock();
+				messageNum++;
+				
+				String currentId = Integer.toString(currentProcess.getProcessId());
+				String message = messageNum + "Lam Gao Sou ";
+				Message m = new Message(currentId, message, currentClock);
+				
+				//currentProcess.broadcastMessage(m);	
+				
+				for(String remoteId: remoteIds){
+					ProcessInterface remoteProcess = (ProcessInterface) currentProcess.getRegistry().lookup(remoteId);
+					if(!currentId.equals(remoteId)){
+						Message m2 = new Message(currentId, remoteId, currentClock, message);
+						Thread.sleep(randomNumber(5,350));
+						remoteProcess.receiveMessage(m2);
+					}	
+				}
+				Thread.sleep(randomNumber(5,50));
+			}
+			
+		}catch (Exception e) {
+			System.out.println("Exception in broadCast " + e);
+		}		
+	}
+	
+	public int randomNumber(int low, int high){
+		Random r = new Random();
+		return r.nextInt(high-low) + low;
+	}
+
+}

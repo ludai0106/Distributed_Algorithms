@@ -1,0 +1,13 @@
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
+
+public class Test {
+	static final int processNum = 3;
+	public static void main(String args[]) throws RemoteException, AlreadyBoundException {		
+		int registryPort = Integer.parseInt(args[0]);
+		int nodePort = Integer.parseInt(args[1]);
+		
+		Process process=new Process(registryPort, nodePort,processNum);
+		process.notifyAll();
+	}
+}

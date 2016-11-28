@@ -1,0 +1,48 @@
+
+public class Birman implements Runnable{
+	private Process currentProcess;
+	private double startTime;
+	private int index;
+	private int messageNum;
+	public Birman(Process process, double time, int index){
+		this.currentProcess=process;
+		this.startTime=time;
+		this.index=index;
+	}
+
+
+	@Override
+	public void run() {
+		try{
+			String[] remoteIds = currentProcess.getRegistry().list();
+			while(true & (System.currentTimeMillis() - startTime) < 20000){
+				currentProcess.getClock().increase(index);
+				Clock currentClock = currentProcess.getClock();
+				messageNum++;
+				
+				String processId = Integer.toString(currentProcess.getProcessId());
+				String message = messageNum + "Lam Gao Sou ";
+				Message m = new Message(processId, message, currentClock);
+				
+				currentNode.broadcastMessage(m);	
+				for(String nodeId: remoteIds){
+					
+					INode remoteNode = currentNode.getRemoteNode(nodeId);
+					if(!nodePortS.equals(nodeId)){
+						Message m2 = new Message(nodePortS, nodeId, message, currentClock);
+						Thread.sleep(randomNumber(5,350));
+						//Thread.sleep(100);
+						remoteNode.receiveMessage(m2);
+					}	
+				}
+				Thread.sleep(randomNumber(5,50));
+			}
+			
+		}catch (Exception e) {
+			System.out.println("Exception in broadCast " + e);
+		}
+
+		
+	}
+
+}

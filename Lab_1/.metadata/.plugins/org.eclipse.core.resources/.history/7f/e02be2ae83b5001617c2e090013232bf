@@ -1,0 +1,40 @@
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+
+public class Process extends UnicastRemoteObject implements ProcessInterface{
+	private int processId;
+	private int port;
+    private String[] remotes;
+    private Clock clock;
+    private Registry registry;
+    public Process(int processId, int port, String[] remotes) throws RemoteException, AlreadyBoundException{
+        this.processId = processId;
+        this.port = port;
+        this.remotes = remotes;
+        this.clock = new Clock(remotes.length);
+        this.registry = LocateRegistry.createRegistry(port);
+        this.registry.bind(Integer.toString(port),  this);
+    }
+
+    public int getProcessId(){
+        return processId;
+    }
+
+    public Clock getClock(){
+        return clock;
+    }
+
+    public void deliverMessage(Message message){}
+
+    public void broadcastMessage(Message message){}
+    
+    public void receiveMessage(Message message){}
+    
+//    public void registerNode(){}
+
+
+
+}

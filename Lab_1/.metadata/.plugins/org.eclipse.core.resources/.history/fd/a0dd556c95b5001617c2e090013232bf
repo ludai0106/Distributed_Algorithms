@@ -1,0 +1,55 @@
+package birman.stephenson;
+
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.LinkedList;
+        
+public class Server extends UnicastRemoteObject implements IServer {            
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5811600924955471950L;
+	private LinkedList<IClient> clients;
+
+    protected Server() throws RemoteException {	
+    	super();
+    	clients = new LinkedList<IClient>();
+    }
+    
+   
+	public void broadcast(String s) throws RemoteException {
+		for(int i = 0;i < clients.size();i++){
+			clients.get(i).receive(s);
+		}
+		
+	}
+	
+	public synchronized void register(IClient c) throws RemoteException {
+		clients.add(c);	
+	}
+
+	public static void main(String args[]) {
+        
+        try {
+            /*Server obj = new Server();
+            ServerI stub = (ServerI) obj;
+
+            // Bind the remote object's stub in the registry
+            Registry registry = LocateRegistry.getRegistry();
+            registry.bind("serverStub", stub);*/ //rebind
+        	
+        	Naming.bind("Server", new Server());
+           
+
+            System.err.println("Server ready, awesome");
+        } catch (Exception e) {
+            System.err.println("Server exception: " + e.toString());
+            e.printStackTrace();
+        }
+    }
+
+
+
+	
+}

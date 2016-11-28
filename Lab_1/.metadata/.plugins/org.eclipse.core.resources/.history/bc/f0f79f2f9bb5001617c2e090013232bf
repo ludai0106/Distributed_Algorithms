@@ -1,0 +1,35 @@
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+
+public class Test {
+	public static void main(String args[]) throws RemoteException, AlreadyBoundException{
+//		int rounds = 1;
+//		
+//		int processNum = 1;
+//	    int Id = 0;
+//	    int port = 40001;
+//	    if (System.getSecurityManager() == null) {
+//	        System.setSecurityManager(new SecurityManager());
+//	    }
+//	    
+//	    Registry registry = LocateRegistry.createRegistry(port);
+//	
+//	    String[] remotes = new String[processNum];
+//	    for (int i=0;i<processNum;i++){
+//	        remotes[i] = String.format("rmi://%s:40001/%s", "localhost", i);
+//	    }
+//	
+//	    Thread threads = null;
+//	
+//	    Process process = new Process(Id, port, remotes);
+		int[] v1= {0,1,2,3,4,5,6};
+		int[] v2= {10,20,30,40,50,60};
+		
+		System.arraycopy(v1, 1, v2, 0, v2.length);
+		for(int each : v2)System.out.println(each);
+		
+	}
+
+}

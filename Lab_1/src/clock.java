@@ -7,20 +7,20 @@ public class Clock {
         timeVector = new int[size];
     }
 
-    public void increase(int i){
+    public synchronized void increase(int i){
         timeVector[i]++;
     }
 
-    public void decrease(int i){
+    public synchronized void decrease(int i){
         timeVector[i]--;
     }
 
-    public void update(int[] receivedVector){
+    public synchronized void update(int[] receivedVector){
         for(int i=0;i<receivedVector.length;i++){
             if (receivedVector[i]>timeVector[i])timeVector[i]=receivedVector[i];
         }
     }
 
-    public void compare(int[] receivedVector){
+    public synchronized void compare(int[] receivedVector){
     }
 }

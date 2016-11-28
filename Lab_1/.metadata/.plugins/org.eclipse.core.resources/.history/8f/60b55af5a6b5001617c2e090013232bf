@@ -1,0 +1,115 @@
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+
+public class Process extends UnicastRemoteObject implements ProcessInterface{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6044439435459038975L;
+	private int processId;
+    private int processNum;
+    private Clock clock;
+    private Registry registry;
+    private int remotes;
+    private int index;
+    public Process( int port, int processId, int processNum) throws RemoteException, AlreadyBoundException{
+        this.processId = processId;
+        this.processNum = processNum;
+        this.clock = new Clock(processNum);
+        this.registry = LocateRegistry.getRegistry(port);
+        this.registry.bind(Integer.toString(processId), this);
+        this.index = this.registry.list().length-1;
+    }
+
+    public int getProcessId(){
+        return processId;
+    }
+
+    public Clock getClock(){
+        return clock;
+    }
+
+    public void deliverMessage(Message message, String receiver ){}
+
+    public void broadcastMessage(Message message){
+    	System.out.println(message.toStringBroadcast());
+    }
+    
+	public void receiveMessage(Message message) throws RemoteException {
+		if(message.getClock().sendCondition(this.clock)){
+			System.out.println(m.toStringReceive() +", own: " + clock);
+			//this.setVectorClock(m.getVectorClock());
+			
+			cloack maxClock = clock.compareClocks(m.getVectorClock(),this.getVectorClock());
+			this.setVectorClock(maxClock);
+		}
+		else{
+			System.out.println(m.toStringReceive() +", own: " + clock + " buffer");
+			synchronized(this) {
+				
+				for(int i = 0;i < buffer.size(); i++){
+					Message messageB = buffer.get(i);
+					System.out.println(messageB.getVectorClock() + "passconditon" + this.getVectorClock());
+					if(messageB.getVectorClock().passCondition(this.getVectorClock())){
+						System.out.println(messageB.toStringReceive() +", own: " + clock + " retry");
+						VectorClock maxClock = clock.compareClocks(messageB.getVectorClock(),this.getVectorClock());
+						this.setVectorClock(maxClock);
+						buffer.remove(i); //TODO index might get confused					
+					}
+				}
+				buffer.add(m);
+			}
+		}
+			
+		}
+//    public void receiveMessage(Message message){
+//    	if(message.getClock().sendCondition(this.clock)){
+//    		System.out.println(message.toStringReceive());
+//    		this.clock.update(message.getClock());
+//    	}
+//    	else{
+//    		
+//    	}
+//    }
+    
+    public void notifyRemotes(){
+    	String[] processes;
+		try {
+			processes = this.getRegistry().list();
+			for(String processName: processes){
+				ProcessInterface remoteProcess = (ProcessInterface) this.getRegistry().lookup(processName);
+				remoteProcess.registerProcess();
+				remotes++;	
+				System.out.println("Notified node: " +processName);
+	
+			}
+		} catch (Exception e) {
+			System.out.println("Exception in notifyOthers" + e);
+		}
+    }
+    
+	public void registerProcess(){
+		if(remotes == processNum){
+			final Process currentProcess = this;
+			final double start = System.currentTimeMillis(); 
+		
+			Birman birman = new Birman(currentProcess,start,index);
+			Thread thread = new Thread(birman);
+			thread.start();
+		}
+			
+	}
+
+	public Registry getRegistry() {
+		return registry;
+	}
+
+	public void setRegistry(Registry registry) {
+		this.registry = registry;
+	}
+
+
+}

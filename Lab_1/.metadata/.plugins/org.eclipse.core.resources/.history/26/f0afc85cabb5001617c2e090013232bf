@@ -1,0 +1,11 @@
+import java.rmi.Remote;
+
+public interface ProcessInterface extends Remote{
+
+    public void broadcastMessage(Message message) throws Exception;
+    
+    public void receiveMessage(Message message) throws Exception;
+	
+	public void registerProcess();
+
+}
