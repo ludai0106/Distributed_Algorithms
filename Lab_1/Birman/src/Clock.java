@@ -16,7 +16,7 @@ public class Clock implements Serializable {
 	}
 		
 	public synchronized void decrease(int i){
-		clock[i]++;
+		clock[i]--;
 	}
 	
 	 public synchronized void update(Clock clock2){
