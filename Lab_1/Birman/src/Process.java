@@ -79,10 +79,12 @@ public class Process extends UnicastRemoteObject implements ProcessInterface{
     	String[] processes;
 		try {
 			processes = this.getRegistry().list();
+			System.out.println("ProcessId: " + processId + "  remote number: " + processes.length);
 			for(String processName: processes){
 				ProcessInterface remoteProcess = (ProcessInterface) this.getRegistry().lookup(processName);
-				remoteProcess.registerProcess();
 				remotes++;
+				remoteProcess.registerProcess();
+		
 				System.out.println("Notified node: " + processName + "  JoinedRemotes: " + remotes);
 	
 			}
@@ -92,14 +94,15 @@ public class Process extends UnicastRemoteObject implements ProcessInterface{
     }
     
 	public void registerProcess(){
-		System.out.println("In register Process " + processId + "  JoinedRemotes: " + remotes);
 		remotes++;
+		System.out.println("In register Process " + processId + "  JoinedRemotes: " + remotes);
 		if(remotes-1 == processNum){
 
 			final Process currentProcess = this;
 			final double start = System.currentTimeMillis(); 
-		
-			Birman birman = new Birman(currentProcess,start,index);
+		    System.out.println("Creat Thread " + processId + " at Time " + start);
+			
+			Birman birman = new Birman(currentProcess,start,currentProcess.index);
 			Thread thread = new Thread(birman);
 			thread.start();
 		}

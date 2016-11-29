@@ -16,8 +16,10 @@ public class Birman implements Runnable{
 	public void run() {
 		try{
 		
-			while(true & (System.currentTimeMillis() - startTime) < 20000){
+			while( (System.currentTimeMillis() - startTime) < 4000){
+				System.out.println(currentProcess.getClock().toString());
 				currentProcess.getClock().increase(index);
+				System.out.println("index: " + index + " " + currentProcess.getClock().toString());
 				Clock currentClock = currentProcess.getClock();
 				messageNum++;
 				
@@ -27,7 +29,7 @@ public class Birman implements Runnable{
 				
 				currentProcess.broadcastMessage(m);
 				
-				Thread.sleep(randomNumber(5,50));
+				Thread.sleep(randomNumber(5,500));
 			}
 			
 		}catch (Exception e) {
