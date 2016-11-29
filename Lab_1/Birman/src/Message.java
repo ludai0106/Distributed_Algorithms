@@ -37,7 +37,7 @@ public class Message implements Serializable{
     }
     
     public String getMessage(){
-    	return message;
+    		return message;
     }
     
     public String toStringBroadcast() {
