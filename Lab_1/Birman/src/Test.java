@@ -3,7 +3,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
 public class Test {
-	static final int processNum = 2;
+	static final int processNum = 5;
 	static int rPort = 1099;
 	public static void main(String args[]) throws RemoteException, AlreadyBoundException {	
 		
