@@ -14,15 +14,18 @@ public class Message implements Serializable {
 	private int levelSender;
 	private int levelReceiver;
 	private boolean isAck;
-	private boolean agreeAck;
 
-	public Message(boolean isAck, boolean agreeAck, int sender, int receiver, int levelSender, int levelReceiver) {
+	public Message(boolean isAck, int sender, int receiver, int levelSender, int levelReceiver) {
 		this.isAck = isAck;
-		this.agreeAck = agreeAck;
+//		this.agreeAck = agreeAck;
 		this.senderId = sender;
 		this.receiverId = receiver;
 		this.levelSender = levelSender;
 		this.levelReceiver = levelReceiver;
+	}
+	
+	public boolean isAck(){
+		return this.isAck;
 	}
 
 	public String toStringReceive() {
@@ -36,7 +39,7 @@ public class Message implements Serializable {
 	}
 
 	public String toStringAck() {
-		String s = senderId + " receives a ack from " + receiverId;
+		String s = receiverId + " receives a ack from " + senderId;
 		// String s= receiver + " sends a ack to " + sender;
 		return s;
 	}
