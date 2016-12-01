@@ -12,6 +12,12 @@ public interface INode extends Remote{
 	public int getPort() throws RemoteException;
 
 	public int getLevel() throws RemoteException;
+	
+	public int getProcessId() throws RemoteException;
+	
+	public void setProcessId(int id) throws RemoteException;
+	
+	public int getOriginProcessId() throws RemoteException;
 
 	public void receiveMessage(Message m) throws AccessException, RemoteException, NotBoundException;
 }

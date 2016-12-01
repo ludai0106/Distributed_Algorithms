@@ -33,9 +33,10 @@ public class Node extends UnicastRemoteObject implements INode {
 	ArrayList<Message> ackList;
 	private ArrayList<String> links; // nodes you haven't send a message to
 	Map<Integer, Boolean> finishBroadCast;
-	//Round,  finish broadcast?
+
+	// Round, finish broadcast?
 	public Node(int size, int port, int processId, int status) throws RemoteException, AlreadyBoundException {
-//		super();
+		// super();
 		this.port = port;
 		this.level = -1;
 		this.processId = processId;
@@ -48,8 +49,16 @@ public class Node extends UnicastRemoteObject implements INode {
 		this.ackList = new ArrayList<>();
 		this.links = new ArrayList<String>();
 		this.finishBroadCast = new HashMap<>();
+		
+		boolean assign;
+		//Status not candidate then true for every map
+		if (status == 0) {
+			assign = true;
+		} else {
+			assign = false;
+		}
 		for (int i = 0; i < size; i++) {
-			finishBroadCast.put(i,false);
+			finishBroadCast.put(i, assign);
 		}
 	}
 
@@ -61,7 +70,7 @@ public class Node extends UnicastRemoteObject implements INode {
 		return this.links;
 	}
 
-	public int getOriginProcessId() {
+	public int getOriginProcessId() throws RemoteException {
 		return this.originProcessId;
 	}
 
@@ -86,12 +95,12 @@ public class Node extends UnicastRemoteObject implements INode {
 		return this.status = status;
 	}
 
-	public int getProcessId() {
+	public int getProcessId() throws RemoteException {
 		return this.processId;
 	}
 
-	public int setProcessId(int id) {
-		return this.processId = id;
+	public void setProcessId(int id) {
+		this.processId = id;
 	}
 
 	public Registry getRegistry() {

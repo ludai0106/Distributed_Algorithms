@@ -1,4 +1,7 @@
 
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.Random;
 
 public class Afek implements Runnable {
@@ -38,12 +41,15 @@ public class Afek implements Runnable {
 						currentNode.finished = true;
 						System.out.println("Elected, and the leader is: (level, nodeId) = (" + currentNode.getLevel()
 								+ ",  " + currentNode.getProcessId() + ")");
+						annouceLeader(remoteIds);
 					} else {
 						int sender = currentNode.getProcessId();
 						k = (int) Math.min(Math.pow(2, currentNode.getLevel() / 2), currentNode.getLinks().size());
 						for (int i = 0; i < k; i++) {
 							int id = randomNumber(0, currentNode.getLinks().size());
 							String receiver = currentNode.getLinks().get(id);
+
+							// receiver in Links has not change
 							currentNode.getLinks().remove(id);
 							INode remoteNode = currentNode.getRemoteNode(receiver);
 							int receiverInt = Integer.parseInt(receiver);
@@ -67,6 +73,11 @@ public class Afek implements Runnable {
 					}
 				}
 				Thread.sleep(200);
+			} // end of while
+
+			while (!currentNode.finished && currentNode.getStatus() == 0) {
+
+				Thread.sleep(200);
 			}
 
 		} catch (Exception e) {
@@ -77,6 +88,17 @@ public class Afek implements Runnable {
 	public static int randomNumber(int low, int high) {
 		Random r = new Random();
 		return r.nextInt(high - low) + low;
+	}
+	
+	
+	//Now change every Node's processId to my Id
+	public void annouceLeader(String[] allNodes) throws AccessException, RemoteException, NotBoundException{
+		for (String s : allNodes) {
+			INode remoteNode = currentNode.getRemoteNode(s);
+			remoteNode.setProcessId(currentNode.getProcessId());
+//			System.out.println(remoteNode.getProcessId() +"  "+remoteNode.getOriginProcessId());
+		}
+		
 	}
 
 }
