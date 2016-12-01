@@ -1,5 +1,3 @@
-
-
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -8,6 +6,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Node extends UnicastRemoteObject implements INode {
 	/**
@@ -19,30 +19,27 @@ public class Node extends UnicastRemoteObject implements INode {
 	// 1 represent Candidate
 	private int status;
 	// If it is consider as candidate, then set it true.
-//	private boolean candidate;
+	// private boolean candidate;
 	boolean finished = false;
 
 	// size of the complete network
 	private int size;
 	private int port;
 	private int level;
-	// private int nodeId;
-	// private int ownerId;
-	// private int ownerLevel;
+	private int originProcessId;
 	private int processId;
 	private Registry registry;
 	private ArrayList<Message> buffer;
 	ArrayList<Message> ackList;
 	private ArrayList<String> links; // nodes you haven't send a message to
-
+	Map<Integer, Boolean> finishBroadCast;
+	//Round,  finish broadcast?
 	public Node(int size, int port, int processId, int status) throws RemoteException, AlreadyBoundException {
-		super();
+//		super();
 		this.port = port;
-		// this.nodeId = nodeId;
-		// this.ownerId = nodeId;
 		this.level = -1;
-		// this.ownerLevel = -1;
 		this.processId = processId;
+		this.originProcessId = processId;
 		this.registry = LocateRegistry.getRegistry(port);
 		this.registry.bind(Integer.toString(processId), this);
 		this.status = status;
@@ -50,13 +47,25 @@ public class Node extends UnicastRemoteObject implements INode {
 		this.buffer = new ArrayList<>();
 		this.ackList = new ArrayList<>();
 		this.links = new ArrayList<String>();
+		this.finishBroadCast = new HashMap<>();
+		for (int i = 0; i < size; i++) {
+			finishBroadCast.put(i,false);
+		}
+	}
+
+	public ArrayList<Message> getBuffer() {
+		return this.buffer;
 	}
 
 	public ArrayList<String> getLinks() {
 		return this.links;
 	}
 
-	public int getPort() throws RemoteException{
+	public int getOriginProcessId() {
+		return this.originProcessId;
+	}
+
+	public int getPort() throws RemoteException {
 		return this.port;
 	}
 
@@ -69,10 +78,6 @@ public class Node extends UnicastRemoteObject implements INode {
 		return this.level;
 	}
 
-	// public int getNodeId() {
-	// return this.nodeId;
-	// }
-
 	public int getStatus() {
 		return this.status;
 	}
@@ -80,14 +85,6 @@ public class Node extends UnicastRemoteObject implements INode {
 	public int setStatus(int status) {
 		return this.status = status;
 	}
-
-	// public int getOwnerId() {
-	// return this.ownerId;
-	// }
-	//
-	// public int getOwnerLevel() {
-	// return this.ownerLevel;
-	// }
 
 	public int getProcessId() {
 		return this.processId;
@@ -97,21 +94,9 @@ public class Node extends UnicastRemoteObject implements INode {
 		return this.processId = id;
 	}
 
-//	public boolean isCandidate() {
-//		return this.candidate;
-//	}
-
 	public Registry getRegistry() {
 		return this.registry;
 	}
-
-	// public void setOwnerId(int ownerId) {
-	// this.ownerId = ownerId;
-	// }
-	//
-	// public void setOwnerLevel(int ownerLevel) {
-	// this.ownerLevel = ownerLevel;
-	// }
 
 	public void setLevel(int level) {
 		this.level = level;
@@ -120,10 +105,6 @@ public class Node extends UnicastRemoteObject implements INode {
 	public void increaseLevel() {
 		this.level = this.level + 1;
 	}
-
-	// public void increaseOwnerLevel() {
-	// this.ownerLevel = this.ownerLevel + 1;
-	// }
 
 	public INode getRemoteNode(String nodeStringId) throws AccessException, RemoteException, NotBoundException {
 		INode remoteNode = (INode) this.registry.lookup(nodeStringId);
@@ -136,7 +117,7 @@ public class Node extends UnicastRemoteObject implements INode {
 		System.out.println(s);
 		synchronized (this) {
 			buffer.add(message);
-			if ((message.getLevelSender() >= message.getLevelReceiver() & message.getSender() >= message.getReceiver())
+			if ((message.getLevelSender() >= message.getLevelReceiver() && message.getSender() >= message.getReceiver())
 					|| message.getLevelSender() > message.getLevelReceiver()) {
 				String sender = Integer.toString(message.getSender());
 				INode nodeSender = this.getRemoteNode(sender);
@@ -145,7 +126,8 @@ public class Node extends UnicastRemoteObject implements INode {
 						message.getLevelReceiver(), message.getLevelSender()));
 				this.setLevel(message.getLevelSender());
 				this.setProcessId(message.getSender());
-				System.out.println("I changed my level and id to: " + this.getLevel() + " and " + this.getProcessId());
+				System.out.println("I changed my level=" + message.getLevelReceiver() + " and id="
+						+ message.getReceiver() + " to: " + this.getLevel() + " and " + this.getProcessId());
 
 			} else {
 				System.out.println("I'm bigger, so you " + message.getSender() + " don't get a ack");
@@ -182,7 +164,7 @@ public class Node extends UnicastRemoteObject implements INode {
 		for (String nodeName : nodes) {
 			INode remoteNode = getRemoteNode(nodeName);
 			remoteNode.registerNode();
-			System.out.println("Notified node: " + nodeName);
+			System.out.println(this.getOriginProcessId() + ":\tNotified node: " + nodeName);
 		}
 
 	}

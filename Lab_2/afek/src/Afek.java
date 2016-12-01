@@ -1,6 +1,4 @@
 
-
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Afek implements Runnable {
@@ -14,30 +12,31 @@ public class Afek implements Runnable {
 	public void run() {
 		try {
 			if (currentNode.getStatus() == 1) {
-				System.out.println("I'm a candidate process");
+				System.out.println(currentNode.getOriginProcessId() + ":\tI'm a candidate process");
 			} else {
-				System.out.println("I'm an ordinary process");
+				System.out.println(currentNode.getOriginProcessId() + ":\tI'm an ordinary process");
 			}
 
-			// TODO Auto-generated method stub
 			String[] remoteIds = currentNode.getRegistry().list();
+			// Complete graph.
 			for (String id : remoteIds) {
 				if (!id.equals(Integer.toString(currentNode.getProcessId())))
 					currentNode.getLinks().add(id);
 			}
 			int k = 0;
-			while (!currentNode.finished & currentNode.getStatus() == 1) {
-				// Not finished and you are a candidate process
+			while (!currentNode.finished && currentNode.getStatus() == 1) {
+				// Not finished && Still candidate
 				currentNode.increaseLevel();
 				Thread.sleep(200);
+
 				System.out.println();
-				System.out.println("New round: " + currentNode.getLevel());
+				System.out.println(currentNode.getOriginProcessId() + "'s New round: " + currentNode.getLevel());
 				if (currentNode.getLevel() % 2 == 0) {
 					// ackReceived = 0;
 					currentNode.ackList.clear();
 					if (currentNode.getLinks().size() == 0) {
 						currentNode.finished = true;
-						System.out.println("Elected, and the winner is: (level, nodeId) = (" + currentNode.getLevel()
+						System.out.println("Elected, and the leader is: (level, nodeId) = (" + currentNode.getLevel()
 								+ ",  " + currentNode.getProcessId() + ")");
 					} else {
 						int sender = currentNode.getProcessId();
@@ -53,10 +52,15 @@ public class Afek implements Runnable {
 							currentNode.broadcastMessage(m);
 							remoteNode.receiveMessage(m);
 						}
+						currentNode.finishBroadCast.put(currentNode.getLevel(), true);
 					}
 				} else {
 					if (currentNode.ackList.size() < k) {
 						System.out.println("I kill myself");
+						for (Message m : currentNode.ackList) {
+							System.out.print(m.toStringAck());
+						}
+						System.out.print("\n");
 						currentNode.setStatus(0);
 					} else {
 						System.out.println("I stay alive");
