@@ -49,9 +49,9 @@ public class Node extends UnicastRemoteObject implements INode {
 		this.ackList = new ArrayList<>();
 		this.links = new ArrayList<String>();
 		this.finishBroadCast = new HashMap<>();
-		
+
 		boolean assign;
-		//Status not candidate then true for every map
+		// Status not candidate then true for every map
 		if (status == 0) {
 			assign = true;
 		} else {
@@ -126,22 +126,30 @@ public class Node extends UnicastRemoteObject implements INode {
 		System.out.println(s);
 		synchronized (this) {
 			buffer.add(message);
-			if ((message.getLevelSender() >= message.getLevelReceiver() && message.getSender() >= message.getReceiver())
-					|| message.getLevelSender() > message.getLevelReceiver()) {
+
+			if ((message.getLevelSender() > this.getLevel()
+					|| message.getLevelSender() == this.getLevel() && message.getSender() >= this.getProcessId())) {
 				String sender = Integer.toString(message.getSender());
 				INode nodeSender = this.getRemoteNode(sender);
+				//TODO: this has to change into 
 				System.out.println("I send a ack to " + sender);
 				nodeSender.receiveAck(new Message(true, message.getReceiver(), message.getSender(),
 						message.getLevelReceiver(), message.getLevelSender()));
+				
+				System.out.println("I changed my level=" + this.getLevel() + " and id=" + this.getProcessId() + " to: "
+						+ message.getLevelSender() + " and " + message.getSender());
 				this.setLevel(message.getLevelSender());
 				this.setProcessId(message.getSender());
-				System.out.println("I changed my level=" + message.getLevelReceiver() + " and id="
-						+ message.getReceiver() + " to: " + this.getLevel() + " and " + this.getProcessId());
 
 			} else {
 				System.out.println("I'm bigger, so you " + message.getSender() + " don't get a ack");
 			}
 		}
+	}
+
+	public boolean checkAllSentInThisRound() {
+
+		return true;
 	}
 
 	public void registerNode() throws AccessException, RemoteException {
