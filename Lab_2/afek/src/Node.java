@@ -49,7 +49,6 @@ public class Node extends UnicastRemoteObject implements INode {
 		this.ackList = new ArrayList<>();
 		this.links = new ArrayList<String>();
 		this.finishBroadCast = new HashMap<>();
-
 		boolean assign;
 		// Status not candidate then true for every map
 		if (status == 0) {
@@ -83,11 +82,15 @@ public class Node extends UnicastRemoteObject implements INode {
 
 	}
 
+	public Map<Integer, Boolean> getFinishBroadCast() throws RemoteException {
+		return this.finishBroadCast;
+	}
+
 	public int getLevel() throws RemoteException {
 		return this.level;
 	}
 
-	public int getStatus() {
+	public int getStatus() throws RemoteException {
 		return this.status;
 	}
 
@@ -131,11 +134,11 @@ public class Node extends UnicastRemoteObject implements INode {
 					|| message.getLevelSender() == this.getLevel() && message.getSender() >= this.getProcessId())) {
 				String sender = Integer.toString(message.getSender());
 				INode nodeSender = this.getRemoteNode(sender);
-				//TODO: this has to change into 
+
 				System.out.println("I send a ack to " + sender);
 				nodeSender.receiveAck(new Message(true, message.getReceiver(), message.getSender(),
 						message.getLevelReceiver(), message.getLevelSender()));
-				
+
 				System.out.println("I changed my level=" + this.getLevel() + " and id=" + this.getProcessId() + " to: "
 						+ message.getLevelSender() + " and " + message.getSender());
 				this.setLevel(message.getLevelSender());
@@ -147,8 +150,14 @@ public class Node extends UnicastRemoteObject implements INode {
 		}
 	}
 
-	public boolean checkAllSentInThisRound() {
-
+	public boolean checkAllSentInThisRound(int Level) throws AccessException, RemoteException, NotBoundException {
+		String[] remoteIds = this.getRegistry().list();
+		for (String s : remoteIds) {
+			INode remoteNode = this.getRemoteNode(s);
+			if (remoteNode.getStatus() == 1 && remoteNode.getFinishBroadCast().get(Level)) {
+				return false;
+			}
+		}
 		return true;
 	}
 

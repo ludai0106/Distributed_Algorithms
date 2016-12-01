@@ -96,7 +96,7 @@ public class Afek implements Runnable {
 		for (String s : allNodes) {
 			INode remoteNode = currentNode.getRemoteNode(s);
 			remoteNode.setProcessId(currentNode.getProcessId());
-//			System.out.println(remoteNode.getProcessId() +"  "+remoteNode.getOriginProcessId());
+//			System.out.println(s+"  "+remoteNode.getOriginProcessId());
 		}
 		
 	}
