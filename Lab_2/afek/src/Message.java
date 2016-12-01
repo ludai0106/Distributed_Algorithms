@@ -1,4 +1,4 @@
-package afek;
+
 
 import java.io.Serializable;
 
@@ -17,15 +17,19 @@ public class Message implements Serializable {
 
 	public Message(boolean isAck, int sender, int receiver, int levelSender, int levelReceiver) {
 		this.isAck = isAck;
-//		this.agreeAck = agreeAck;
+		// this.agreeAck = agreeAck;
 		this.senderId = sender;
 		this.receiverId = receiver;
 		this.levelSender = levelSender;
 		this.levelReceiver = levelReceiver;
 	}
-	
-	public boolean isAck(){
+
+	public boolean isAck() {
 		return this.isAck;
+	}
+
+	public void setIsAck(boolean isAck) {
+		this.isAck = isAck;
 	}
 
 	public String toStringReceive() {
@@ -75,7 +79,5 @@ public class Message implements Serializable {
 	public void setReceiver(int receiver) {
 		this.receiverId = receiver;
 	}
-	
-	
 
 }
