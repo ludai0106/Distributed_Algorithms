@@ -1,0 +1,158 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.rmi.AccessException;
+import java.rmi.AlreadyBoundException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Process extends UnicastRemoteObject implements ProcessInterface{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6044439435459038975L;
+	private int processId;
+    private int processNum;
+    private Clock clock;
+    private Registry registry;
+    private int remotes;
+    private int index;
+    private int broadcastNum;
+	ArrayList<Message> buffer = new ArrayList<Message>();
+    public Process( int port, int processId, int processNum, int broadcastNum) throws RemoteException, AlreadyBoundException{
+        this.processId = processId;
+        this.processNum = processNum;
+        this.clock = new Clock(processNum);
+        this.registry = LocateRegistry.getRegistry(port);
+        this.registry.bind(Integer.toString(processId), this);
+        this.index = this.registry.list().length-1;
+        this.broadcastNum = broadcastNum;
+    }
+
+    public int getProcessId(){
+        return processId;
+    }
+
+    public Clock getClock(){
+        return clock;
+    }
+
+    public void broadcastMessage(Message message)  throws RemoteException, NotBoundException, InterruptedException{
+    	System.out.println(message.toStringBroadcast());
+    	this.WriteSend(message.toStringBroadcast());
+    	String[] remoteIds = this.registry.list();
+		String currentId = Integer.toString(processId);
+    	for(String remoteId: remoteIds){
+			ProcessInterface remoteProcess = (ProcessInterface) this.registry.lookup(remoteId);
+			if(!currentId.equals(remoteId)){
+				Message m2 = new Message(currentId, remoteId, clock, message.getMessage(), index);
+				System.out.println("Process " + processId + " sends to " + "Process " + remoteId +" at " + clock.toString());
+				this.WriteSend("Process " + processId + " sends to " + "Process " + remoteId +" at " + clock.toString());
+				remoteProcess.receiveMessage(m2);
+				clock.increase(index);
+				Thread.sleep(randomNumber(5,50));
+			}	
+		}
+    }
+    
+    
+	public synchronized void receiveMessage(Message message) throws RemoteException {
+		if(message.getClock().sendCondition(this.clock, message.getSenderIndex())){
+			System.out.println(message.toStringReceive() + "at " + clock.toString());
+			this.WriteReceive(messageBuffer.toStringReceive() + "at " + clock.toString());
+			
+			//this.setVectorClock(m.getVectorClock());
+			this.clock.update(message.getClock());
+		}
+		else{
+			System.out.println(message.toStringReceive() +", own: " + clock + " buffer");
+			synchronized(this) {
+				for(Message messageBuffer:buffer){
+					//System.out.println(messageBuffer.getClock() + "sendconditon" + this.getClock());
+					if(messageBuffer.getClock().sendCondition(this.clock,message.getSenderIndex())){
+						System.out.println(messageBuffer.toStringReceive() + "at " + clock.toString());
+						this.WriteReceive(messageBuffer.toStringReceive() + "at " + clock.toString());
+						
+						this.clock.update(messageBuffer.getClock());
+						buffer.remove(messageBuffer);
+					}
+				}
+				buffer.add(message);
+			}
+		}		
+	}
+
+    
+    public void notifyRemotes(){
+    	String[] processes;
+		try {
+			processes = this.getRegistry().list();
+			System.out.println("ProcessId: " + processId + "  remote number: " + processes.length);
+			for(String processName: processes){
+				ProcessInterface remoteProcess = (ProcessInterface) this.getRegistry().lookup(processName);
+				remoteProcess.registerProcess(processes.length);
+				
+				//System.out.println("Notified node: " + processName + "  JoinedRemotes: " + remotes);
+	
+			}
+		} catch (Exception e) {
+			System.out.println("Exception in notifyOthers" + e);
+		}
+    }
+    
+	public void registerProcess(int pNum){
+		remotes = pNum;
+		//System.out.println("In register Process " + processId + "  JoinedRemotes: " + remotes);
+		if(remotes == processNum){
+
+			final Process currentProcess = this;
+			final double start = System.currentTimeMillis(); 
+		    System.out.println("Create Thread " + processId + " at Time " + start);
+			
+			Broadcast birman = new Broadcast(currentProcess,currentProcess.index,currentProcess.broadcastNum);
+			Thread thread = new Thread(birman);
+			thread.start();
+		}
+			
+	}
+
+	public Registry getRegistry() {
+		return registry;
+	}
+
+	public void setRegistry(Registry registry) {
+		this.registry = registry;
+	}
+
+	public int randomNumber(int low, int high){
+		Random r = new Random();
+		return r.nextInt(high-low) + low;
+	}
+	
+	public void WriteSend(String sendMessage){
+	     try {
+	            String send = "sends.txt";
+	            FileWriter fileSend = new FileWriter(send, true);
+	            fileSend.write(sendMessage + "\n");
+	            fileSend.close();
+	        } catch (IOException var4) {
+	            System.err.println("IOException: " + var4.getMessage());
+	        }
+	}
+	
+	public void WriteReceive(String receiveMessage){
+	     try {
+	            String receive = "receives.txt";
+	            FileWriter fileReceive = new FileWriter(receive, true);
+	            fileReceive.write(receiveMessage + "\n");
+	            fileReceive.close();
+	        } catch (IOException var4) {
+	            System.err.println("IOException: " + var4.getMessage());
+	        }
+	}
+
+}

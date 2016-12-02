@@ -1,0 +1,75 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Random;
+
+public class Broadcast{
+	
+	private Process currentProcess;
+	private double start;
+	private int broadcastRounds;
+	private int index;
+	private int count;
+	
+	
+	public Broadcast(Process process,int broadcastRounds,int index, double start){
+		this.currentProcess = process;
+		this.broadcastRounds = broadcastRounds;
+		this.index = index;
+		this.start  = start;
+		this.count = 0;
+	}
+	
+	public Runnable run() {
+		try{
+			String[] remoteIds = currentProcess.getRegistry().list();
+			while(count < broadcastRounds){
+				currentProcess.getVectorClock().increment(index);
+				Clock currentClock = currentProcess.getVectorClock();
+				count++;
+				
+				String currentId = Integer.toString(currentProcess.getProcessId());
+				String message = count + ". Hoi! ";
+				Message m = new Message(currentId, message, currentClock);
+				String broadcastMessage = m.toStringBroadcast();
+				System.out.println(broadcastMessage);
+				this.WriteSend(broadcastMessage);
+			
+				for(String remoteId: remoteIds){
+					
+					IProcess remoteNode = currentProcess.getRemoteProcess(remoteId);
+					if(!currentId.equals(remoteId)){
+						Message m2 = new Message(currentId, remoteId, message, currentClock);
+						String send = currentId +" --> " + remoteId + " " + message + " , "+ currentClock.toString();
+						System.out.println(send);
+						Thread.sleep(randomNumber(5,350));
+						remoteNode.receiveMessage(m2);
+					}	
+				}
+				Thread.sleep(randomNumber(5,50));
+			}
+			
+		}catch (Exception e) {
+			System.out.println("Exception in broadCast " + e);
+		}
+		return null;
+	
+	}
+	
+	public int randomNumber(int low, int high){
+		Random r = new Random();
+		return r.nextInt(high-low) + low;
+	}
+	
+	public void WriteSend(String sendMessage){
+	     try {
+	            String send = "sends.txt";
+	            FileWriter fileSend = new FileWriter(send, true);
+	            fileSend.write(sendMessage + "\n");
+	            fileSend.close();
+	        } catch (IOException var4) {
+	            System.err.println("IOException: " + var4.getMessage());
+	        }
+	}
+
+
+}

@@ -1,0 +1,73 @@
+import java.io.Serializable;
+
+public class Message implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3082022562623305320L;
+	private String sender;
+	private String receiver;
+	private String message;
+	private VectorClock vectorClock;
+	
+	public Message(String sender, String receiver, String message, VectorClock vectorClock) {
+		this.sender = sender;
+		this.receiver = receiver;
+		this.message = message;
+		this.vectorClock = vectorClock;
+	}
+	
+	public Message(String sender, String message, VectorClock vectorClock) {
+		this.sender = sender;
+		this.message = message;
+		this.vectorClock = vectorClock;
+	}
+	
+	public String toStringReceive() {
+		String s = receiver + " receives message from " + sender + ": " + message + " " + vectorClock.toString();
+		return s;
+	}
+	
+	public String toStringBroadcast() {
+		String s= "Broadcast: Node " + sender + " says " + message + " " +  vectorClock.toString();
+		return s;
+	}
+
+	public String getSender() {
+		return sender;
+	}
+
+	public void setSender(String sender) {
+		this.sender = sender;
+	}
+
+	public String getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(String receiver) {
+		this.receiver = receiver;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public VectorClock getVectorClock() {
+		return vectorClock;
+	}
+
+	public void setVectorClock(VectorClock vectorClock) {
+		this.vectorClock = vectorClock;
+	}
+
+	
+	
+	
+	
+
+}

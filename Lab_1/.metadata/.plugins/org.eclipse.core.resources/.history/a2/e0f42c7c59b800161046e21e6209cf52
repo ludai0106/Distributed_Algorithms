@@ -1,0 +1,57 @@
+import java.util.Random;
+
+public class Broadcast{
+	
+	private Process currentProcess;
+	private double start;
+	private int broadcastRounds;
+	private int index;
+	private int count;
+	
+	
+	public Broadcast(Process process,int broadcastRounds,int index, double start){
+		this.currentProcess = process;
+		this.broadcastRounds = broadcastRounds;
+		this.index = index;
+		this.start  = start;
+		this.count = 1;
+	}
+	
+	public Runnable run() {
+		try{
+			String[] remoteIds = currentProcess.getRegistry().list();
+			while(count <= broadcastRounds){
+				currentProcess.getVectorClock().increment(index);
+				Clock currentClock = currentProcess.getVectorClock();
+				count++;
+				
+				String nodePortS = Integer.toString(currentProcess.getProcessId());
+				String message = count + ". Hello ";
+				Message m = new Message(nodePortS, message, currentClock);
+				currentProcess.broadcastMessage(m);	
+				for(String nodeId: remoteIds){
+					
+					IProcess remoteNode = currentProcess.getRemoteNode(nodeId);
+					if(!nodePortS.equals(nodeId)){
+						Message m2 = new Message(nodePortS, nodeId, message, currentClock);
+						Thread.sleep(randomNumber(5,350));
+						//Thread.sleep(100);
+						remoteNode.receiveMessage(m2);
+					}	
+				}
+				Thread.sleep(randomNumber(5,50));
+			}
+			
+		}catch (Exception e) {
+			System.out.println("Exception in broadCast " + e);
+		}
+		return null;
+	
+	}
+	
+	public int randomNumber(int low, int high){
+		Random r = new Random();
+		return r.nextInt(high-low) + low;
+	}
+
+}

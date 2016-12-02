@@ -1,0 +1,214 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.rmi.AccessException;
+import java.rmi.AlreadyBoundException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Process extends UnicastRemoteObject implements IProcess {
+
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6217181541080759395L;
+	private int processId;
+	private int processNum;
+	private Registry registry;
+	public Clock clock;
+	int index;
+	ArrayList<Message> buffer = new ArrayList<Message>();
+	int broadcastRounds;
+	private int count;
+
+	protected Process(int registryPort, int processId, int ProcessNum, int num) throws RemoteException {
+		super();
+		this.setProcessId(processId);
+		this.processNum = ProcessNum;
+		this.setRegistry(LocateRegistry.getRegistry(registryPort));
+		clock = new Clock(ProcessNum);
+		try {
+			this.getRegistry().bind(Integer.toString(this.getProcessId()),this);
+		} catch (AlreadyBoundException e) {
+			System.out.println("Already bound" + e);
+		}
+		index = this.getRegistry().list().length-1;
+		broadcastRounds = num;
+		count = 0;
+	}
+	
+	public void notifyProcess(){
+		String[] processes;
+		try {
+			processes = this.getRegistry().list();
+			for(String processId: processes){
+				IProcess remoteNode = getRemoteProcess(processId);
+				remoteNode.registerNode(processes.length);
+	
+			}
+		} catch (Exception e) {
+			System.out.println("Exception in notifyOthers" + e);
+		}
+	}
+	
+	public void broadcast(){
+		final Process currentProcess = this;
+	
+		new Thread(new Runnable(){
+			public void run(){
+				try{
+					String[] remoteIds = currentProcess.registry.list();
+					while(currentProcess.count < currentProcess.broadcastRounds){
+						currentProcess.getClock().increment(index);
+						Clock currentClock = currentProcess.getClock();
+						currentProcess.count++;
+						
+						String currentId = Integer.toString(currentProcess.processId);
+						String message = currentProcess.count + " * Hoi! ";
+						Message m = new Message(currentId, message, currentClock);
+						String broadcastMessage = m.toStringBroadcast();
+						System.out.println(broadcastMessage);
+						
+						for(String nodeId: remoteIds){
+							
+							IProcess remoteNode = currentProcess.getRemoteProcess(nodeId);
+							if(!currentId.equals(nodeId)){
+								Message m2 = new Message(currentId, nodeId, message, currentClock);
+								String send = currentId +" --> " + remoteId + " " + message + " , "+ currentClock.toString();
+								System.out.println(send);
+								Thread.sleep(randomNumber(5,350));
+								//Thread.sleep(100);
+								remoteNode.receiveMessage(m2);
+							}	
+						}
+						Thread.sleep(randomNumber(5,50));
+					}
+					
+				}catch (Exception e) {
+					System.out.println("Exception in broadCast " + e);
+				}
+			}
+			
+		}).start();
+		
+	}
+
+
+	public void receiveMessage(Message m) throws RemoteException {		
+		
+		if(!m.getClock().passCondition(this.getClock())){
+			System.out.println(m.toStringReceive() +", own: " + clock + " buffer");
+			synchronized(this) {
+				
+				for(int i = 0;i < buffer.size(); i++){
+					Message messageB = buffer.get(i);
+					System.out.println(messageB.getClock() + "passconditon" + this.getClock());
+					if(messageB.getClock().passCondition(this.getClock())){
+						System.out.println(messageB.toStringReceive() +", own: " + clock + " retry");
+						this.WriteReceive(messageB.toStringReceive() + " , " + clock.toString());
+						clock.increment(index);
+						Clock maxClock = clock.compareClocks(messageB.getClock(),this.getClock());
+					    
+						this.setClock(maxClock);
+			
+						buffer.remove(i); 				
+					}
+				}
+				buffer.add(m);
+			}
+		}
+		else{
+			System.out.println(m.toStringReceive() +", own: " + clock);
+			this.WriteReceive(m.toStringReceive() + " , " + clock.toString());
+			clock.increment(index);
+			Clock maxClock = clock.compareClocks(m.getClock(),this.getClock());
+			
+			this.setClock(maxClock);
+			//System.out.println(maxClock.toString());
+			
+		}
+		
+	}
+		
+	IProcess getRemoteProcess(String nodeStringId) throws AccessException, RemoteException, NotBoundException {
+		IProcess remoteNode = (IProcess) this.getRegistry().lookup(nodeStringId);
+		return remoteNode;
+	}
+
+	public void registerNode(int length) throws RemoteException {
+//		nodesJoined++;
+		if(length == processNum){
+//			final Process currentProcess = this;
+//
+//			Broadcast broadcast = new Broadcast(currentProcess,broadcastRounds,index);
+//			Thread broadcastThread = new Thread(broadcast.run());
+//			broadcastThread.start();
+			broadcast();
+			
+		}
+	}
+	
+	public Clock getClock(){
+		return clock;		
+		
+	}
+	
+	public void setClock(Clock clockNew){
+		clock = clockNew;		
+	}
+
+	public Registry getRegistry() {
+		return registry;
+	}
+
+	public void setRegistry(Registry registry) {
+		this.registry = registry;
+	}
+
+	public int getProcessId() {
+		return processId;
+	}
+
+	public void setProcessId(int processId) {
+		this.processId = processId;
+	}
+	
+	public synchronized void WriteReceive(String receiveMessage){
+	     try {
+	            String receive = "receives.txt";
+	            FileWriter fileReceive = new FileWriter(receive, true);
+	            fileReceive.write(receiveMessage + "\n");
+	            fileReceive.close();
+	        } catch (IOException var4) {
+	            System.err.println("IOException: " + var4.getMessage());
+	        }
+	}
+	
+	public synchronized void WriteSend(String sendMessage){
+	     try {
+	            String send = "sends.txt";
+	            FileWriter fileSend = new FileWriter(send, true);
+	            fileSend.write(sendMessage + "\n");
+	            fileSend.close();
+	        } catch (IOException var4) {
+	            System.err.println("IOException: " + var4.getMessage());
+	        }
+	}
+
+	public int randomNumber(int low, int high){
+		Random r = new Random();
+		return r.nextInt(high-low) + low;
+	}
+	
+
+}

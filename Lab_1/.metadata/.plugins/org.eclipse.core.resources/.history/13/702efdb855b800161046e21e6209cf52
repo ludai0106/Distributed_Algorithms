@@ -1,0 +1,10 @@
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface INode extends Remote{
+	 void broadcastMessage(Message m) throws Exception;
+	 void registerNode(int length) throws Exception;
+	 void receiveMessage(Message m) throws Exception;
+	 VectorClock getVectorClock() throws Exception;
+	 void setVectorClock(VectorClock clockNew) throws Exception;
+}

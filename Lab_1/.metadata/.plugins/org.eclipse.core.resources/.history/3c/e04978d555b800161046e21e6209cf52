@@ -1,0 +1,84 @@
+import java.io.Serializable;
+
+public class VectorClock implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7053583547187105600L;
+	private int[] vector;
+
+	public VectorClock(int size){
+		vector = new int[size];
+	}
+	
+	public VectorClock(int[] vector){
+		this.vector = vector;
+	}
+	
+	public void increment(int i){
+		vector[i]++;
+	}
+	
+	public void decrement(int i){
+		vector[i]++;
+	}
+	
+	public VectorClock compareClocks(VectorClock sender, VectorClock receiver){
+		int[] vectorS = sender.vector;
+		int[] vectorR = receiver.vector;		
+		int[] max = new int[vectorS.length];
+		for(int i = 0; i < vectorS.length;i++){
+			max[i] = Math.max(vectorS[i], vectorR[i]);
+		}
+		
+		return new VectorClock(max);
+	}
+	
+	public boolean greaterEqual(VectorClock clock){
+		int[] v1 = this.vector;
+		int[] v2 = clock.vector;
+		for(int i = 0; i < v1.length;i++){
+			if(v1[i] < v2[i])
+				return false;			
+		}
+		return true;
+	}
+	
+	//this vectorclock of message send, clock is vectorclock of receiver
+	public boolean passCondition(VectorClock clock){
+		int[] v1 = this.vector;
+		int[] v2 = clock.vector;
+		int count = 0;
+		for(int i = 0; i < v1.length;i++){
+			if(v1[i] > v2[i])
+				count++;			
+		}
+		return (count <= 1);
+	}
+	
+	public String toString(){
+		String s = "[";
+		for(int i = 0; i < vector.length; i++){
+			s = s + vector[i] + ",";
+		}
+		s = s.substring(0, s.length()-1);
+		s = s + "]";
+		return s;
+	
+	}
+	
+	
+	/*public static void main(String args[]){
+		VectorClock v1 = new VectorClock(3);
+		v1.increment(0);
+		v1.increment(1);
+		v1.increment(2);
+		
+		VectorClock v2 = new VectorClock(3);
+		v2.increment(2);
+		System.out.println(v1.passCondition(v2));
+	}*/
+	
+
+}
