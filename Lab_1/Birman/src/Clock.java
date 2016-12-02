@@ -21,10 +21,6 @@ public class Clock implements Serializable{
 		vector[i]++;
 	}
 	
-	public void decrement(int i){
-		vector[i]++;
-	}
-	
 	public Clock compareClocks(Clock sender, Clock receiver){
 		int[] vectorS = sender.vector;
 		int[] vectorR = receiver.vector;		
@@ -34,6 +30,16 @@ public class Clock implements Serializable{
 		}
 		
 		return new Clock(max);
+	}
+	
+	public boolean Equal(Clock clock){
+		int[] v1 = this.vector;
+		int[] v2 = clock.vector;
+		for(int i = 0; i < v1.length;i++){
+			if(v1[i] != v2[i])
+				return false;			
+		}
+		return true;
 	}
 	
 	public boolean greaterEqual(Clock clock){
@@ -47,10 +53,16 @@ public class Clock implements Serializable{
 	}
 	
 	
-	public boolean passCondition(Clock clock){
+	public boolean receiveCondition(Clock clock){
 		int[] v1 = this.vector;
 		int[] v2 = clock.vector;
 		int count = 0;
+//		for(int i=0;i<v2.length;i++){
+//			if(v2[i]==0)count++;
+//		}
+//		if(count==(v2.length-1))return true;
+		
+		count=0;
 		for(int i = 0; i < v1.length;i++){
 			if(v1[i] > v2[i])
 				count++;			
