@@ -6,7 +6,7 @@ import java.rmi.registry.LocateRegistry;
 
 public class Test {
 
-	static final int networkSize = 2;
+	static final int networkSize = 4;
 	static int rPort = 1099;
 
 	public static void main(String args[]) throws RemoteException, AlreadyBoundException, NotBoundException {
@@ -23,7 +23,7 @@ public class Test {
 				System.out.println(node.getOriginProcessId() + ":\tWaiting for the incoming messages...");
 			}
 		} else {
-			LocateRegistry.createRegistry(rPort);
+//			LocateRegistry.createRegistry(rPort);
 			Node node;
 			int Id = Integer.parseInt(args[0]);
 			int status = Integer.parseInt(args[1]);
