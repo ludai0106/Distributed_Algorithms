@@ -6,7 +6,7 @@ import java.rmi.registry.LocateRegistry;
 
 public class Test {
 
-	static final int networkSize = 20;
+	static final int networkSize = 200;
 	static int rPort = 1099;
 
 	public static void main(String args[]) throws RemoteException, AlreadyBoundException, NotBoundException {
