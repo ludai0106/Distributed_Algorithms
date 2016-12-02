@@ -1,0 +1,21 @@
+package birman1;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
+public class Node{
+	
+	static final int networkSize = 4;
+	
+	public static void main(String args[]) throws Exception {
+        
+		int registryPort = Integer.parseInt(args[0]);
+		int nodePort = Integer.parseInt(args[1]);
+		
+		NodeTest node = new NodeTest(registryPort, nodePort, networkSize);
+		node.notifyOthers();
+		System.out.println("Waiting for the incoming messages...");
+    }
+
+}

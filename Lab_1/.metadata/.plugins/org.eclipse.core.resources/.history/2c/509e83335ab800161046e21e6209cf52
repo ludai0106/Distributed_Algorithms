@@ -1,0 +1,31 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.rmi.registry.LocateRegistry;
+
+public class Test{
+	
+	static final int rPort = 1099;
+	static final int processNum = 4;
+	
+	public static void main(String args[]) throws Exception {
+		if(args.length>0){     
+			int registryPort = Integer.parseInt(args[0]);
+			int nodePort = Integer.parseInt(args[1]);
+			
+			Process node = new Process(registryPort, nodePort, processNum);
+			node.notifyProcess();
+			System.out.println("ready...");
+		}
+		else {
+			LocateRegistry.createRegistry(rPort);
+			for(int i=0;i<processNum;i++){
+				int processId = 1000 + i;
+				Process process = new Process(rPort, processId, processNum);
+				process.notifyProcess();
+			}
+
+		}
+    }
+
+}

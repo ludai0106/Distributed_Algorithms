@@ -1,0 +1,33 @@
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+
+public class Test {
+	static final int processNum = 2;
+	static int rPort = 1099;
+	public static void main(String args[]) throws RemoteException, AlreadyBoundException {	
+		
+		if(args.length>0){
+			int rPort = Integer.parseInt(args[0]);
+			int processId = Integer.parseInt(args[1]);
+			int broadcastNum = Integer.parseInt(args[2]);
+			
+			Process process=new Process(rPort, processId,processNum,broadcastNum);
+			process.notifyRemotes();
+
+			
+		}
+		
+		else{
+			LocateRegistry.createRegistry(rPort);
+			for(int i=0;i<processNum;i++){
+				int processId = 1000 + i;
+				int broadcastNum = 3;
+				Process process=new Process(rPort, processId, processNum, broadcastNum);
+				process.notifyRemotes();
+			}
+			
+			
+		}
+	}
+}

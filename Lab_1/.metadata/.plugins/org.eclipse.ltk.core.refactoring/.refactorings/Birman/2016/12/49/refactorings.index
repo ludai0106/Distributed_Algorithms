@@ -1,0 +1,7 @@
+1480596406577	Rename type 'Birman'
+1480635437084	Rename type 'Node'
+1480658899686	Rename type 'INode'
+1480658927202	Rename type 'NodeTest'
+1480658947469	Rename type 'VectorClock'
+1480659752332	Encapsulate field 'registry'
+1480659931042	Encapsulate field 'processId'

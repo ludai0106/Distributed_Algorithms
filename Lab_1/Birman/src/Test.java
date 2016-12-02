@@ -1,25 +1,34 @@
-import java.rmi.AlreadyBoundException;
-import java.rmi.RemoteException;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.rmi.registry.LocateRegistry;
 
-public class Test {
-	static final int processNum = 5;
-	static int rPort = 1099;
-	public static void main(String args[]) throws RemoteException, AlreadyBoundException {	
-		
-//		int registryPort = Integer.parseInt(args[0]);
-//		int nodePort = Integer.parseInt(args[1]);
-//		
-//		Process process=new Process(registryPort, nodePort,processNum);
-//		process.notifyRemotes();
+
+public class Test{
+
 	
-		LocateRegistry.createRegistry(rPort);
-		
-		for(int i=0;i<processNum;i++){
-			int pPort = 1000 + i;
-			
-			Process process=new Process(rPort, pPort,processNum);
-			process.notifyRemotes();
+	static final int rPort = 1099;
+	static final int processNum = 5;
+	
+	public static void main(String args[]) throws Exception {
+		if(args.length>0){     
+			int registryPort = Integer.parseInt(args[0]);
+			int processId = Integer.parseInt(args[1]);
+			int broadcastRounds = Integer.parseInt(args[2]);
+			Process node = new Process(registryPort, processId, processNum, broadcastRounds);
+			node.notifyProcess();
+			System.out.println("ready...");
 		}
-	}
+		else {
+			LocateRegistry.createRegistry(rPort);
+			for(int i=0;i<processNum;i++){
+				int processId = 1000 + i;
+				int broadcastRounds = 3;
+				Process process = new Process(rPort, processId, processNum, broadcastRounds);
+				process.notifyProcess();
+			}
+
+		}
+    }
+
 }
