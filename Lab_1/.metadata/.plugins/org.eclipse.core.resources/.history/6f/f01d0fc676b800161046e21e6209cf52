@@ -1,0 +1,10 @@
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface IProcess extends Remote{
+	 public void registerProcess(int length) throws Exception;
+	 public void receiveMessage(Message m) throws Exception;
+	 public Clock getClock() throws Exception;
+	 public void setClock(Clock clockNew) throws Exception;
+	 
+}

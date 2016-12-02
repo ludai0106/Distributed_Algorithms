@@ -1,10 +1,5 @@
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -114,29 +109,62 @@ public class Process extends UnicastRemoteObject implements IProcess {
 
 	public void receiveMessage(Message m) throws RemoteException {		
 		
-		if(!m.getClock().passCondition(this.getClock())){
-			System.out.println(m.toStringReceive() +", own: " + clock + " put in buffer");
+		if(!m.getClock().receiveCondition(this.getClock())){
+			//System.out.println(m.toStringReceive() +", receiver: " + clock + " buffer");
 			synchronized(this) {
-				
-				for(int i = 0;i < buffer.size(); i++){
-					Message messageB = buffer.get(i);
-					//System.out.println(messageB.getClock() + "passconditon" + this.getClock());
-					if(messageB.getClock().passCondition(this.getClock())){
-						System.out.println(messageB.toStringReceive() +", own: " + clock + " retry from buffer");
-						this.WriteReceive(messageB.toStringReceive() + " , " + clock.toString());
+				Clock lastClock = this.getClock();
+				boolean condition = true;
+				boolean retry_m = false;
+				while(condition){
+					for(int i = 0;i < buffer.size(); i++){
+						Message messageB = buffer.get(i);
+						
+						if(messageB.getClock().receiveCondition(this.getClock())){
+							//System.out.println(messageB.toStringReceive() +", receiver: " + clock + " retry buffer");
+							this.WriteReceive(messageB.toStringReceive() + " , " + clock.toString());
+							clock.increment(index);
+							Clock maxClock = clock.compareClocks(messageB.getClock(),this.getClock());
+							this.setClock(maxClock);
+							buffer.remove(messageB); 				
+						}	
+					}
+					if(lastClock.Equal(this.getClock()))condition = false;
+					else {
+						lastClock = this.getClock();
+					}
+					if((!retry_m) && m.getClock().receiveCondition(this.getClock())){
+						//System.out.println(m.toStringReceive() +", receiver: " + clock + " retry m");
+						this.WriteReceive(m.toStringReceive() + " , " + clock.toString());
 						clock.increment(index);
-						Clock maxClock = clock.compareClocks(messageB.getClock(),this.getClock());
-					    
+						Clock maxClock = clock.compareClocks(m.getClock(),this.getClock());
 						this.setClock(maxClock);
-			
-						buffer.remove(i); 				
+						retry_m = true;
+						condition = true;
 					}
 				}
-				buffer.add(m);
+				if(!retry_m)buffer.add(m);
 			}
 		}
+				
+//				for(int i = 0;i < buffer.size(); i++){
+//					Message messageB = buffer.get(i);
+//					//System.out.println(messageB.getClock() + "passconditon" + this.getClock());
+//					if(messageB.getClock().receiveCondition(this.getClock())){
+//						System.out.println(messageB.toStringReceive() +", receiver: " + clock + " retry from buffer");
+//						this.WriteReceive(messageB.toStringReceive() + " , " + clock.toString());
+//						clock.increment(index);
+//						Clock maxClock = clock.compareClocks(messageB.getClock(),this.getClock());
+//					    
+//						this.setClock(maxClock);
+//			
+//						buffer.remove(i); 				
+//					}
+//				}
+//				buffer.add(m);
+//			}
+//			}
 		else{
-			System.out.println(m.toStringReceive() +", own: " + clock);
+			System.out.println(m.toStringReceive() +", receiver: " + clock);
 			this.WriteReceive(m.toStringReceive() + " , " + clock.toString());
 			clock.increment(index);
 			Clock maxClock = clock.compareClocks(m.getClock(),this.getClock());
@@ -161,12 +189,12 @@ public class Process extends UnicastRemoteObject implements IProcess {
 		}
 	}
 	
-	public Clock getClock(){
+	public Clock getClock() throws RemoteException{
 		return clock;		
 		
 	}
 	
-	public void setClock(Clock clockNew){
+	public void setClock(Clock clockNew) throws RemoteException{
 		clock = clockNew;		
 
 	}
@@ -210,11 +238,13 @@ public class Process extends UnicastRemoteObject implements IProcess {
 	        }
 	}
 
-	public int randomNumber(int low, int high){
 
+	public int randomNumber(int min, int max){
 		Random r = new Random();
-		return r.nextInt(high - low) + low;
+		return r.nextInt(max-min) + min;
 	}
 	
 
 }
+
+
