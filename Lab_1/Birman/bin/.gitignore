@@ -1,8 +1,11 @@
 /.DS_Store
-/Birman.class
 /Clock.class
+/IProcess.class
 /Message.class
+/Process$1.class
 /Process.class
-/ProcessInterface.class
+/RM.sh
 /Test.class
 /my.policy
+/receives.txt
+/sends.txt

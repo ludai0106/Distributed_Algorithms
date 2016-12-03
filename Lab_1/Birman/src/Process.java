@@ -10,18 +10,15 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Random;
 
-
 public class Process extends UnicastRemoteObject implements IProcess {
 
 	
-
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6217181541080759395L;
 	private int processId;
 	private int processNum;
-
 	private Registry registry;
 	public Clock clock;
 	private int index;
@@ -54,13 +51,11 @@ public class Process extends UnicastRemoteObject implements IProcess {
 				IProcess remoteProcess = getRemoteProcess(processId);
 				remoteProcess.registerProcess(processes.length);
 	
-
 			}
 		} catch (Exception e) {
 			System.out.println("Exception in notifyOthers" + e);
 		}
 	}
-
 	
 	public void broadcast(){
 		final Process currentProcess = this;
@@ -110,7 +105,7 @@ public class Process extends UnicastRemoteObject implements IProcess {
 	public void receiveMessage(Message m) throws RemoteException {		
 		
 		if(!m.getClock().receiveCondition(this.getClock())){
-			//System.out.println(m.toStringReceive() +", receiver: " + clock + " buffer");
+			System.out.println(m.toStringReceive() +", receiver: " + clock + " buffer");
 			synchronized(this) {
 				Clock lastClock = this.getClock();
 				boolean condition = true;
@@ -120,7 +115,7 @@ public class Process extends UnicastRemoteObject implements IProcess {
 						Message messageB = buffer.get(i);
 						
 						if(messageB.getClock().receiveCondition(this.getClock())){
-							//System.out.println(messageB.toStringReceive() +", receiver: " + clock + " retry buffer");
+							System.out.println(messageB.toStringReceive() +", receiver: " + clock + " retry buffer");
 							this.WriteReceive(messageB.toStringReceive() + " , " + clock.toString());
 							clock.increment(index);
 							Clock maxClock = clock.compareClocks(messageB.getClock(),this.getClock());
@@ -196,7 +191,6 @@ public class Process extends UnicastRemoteObject implements IProcess {
 	
 	public void setClock(Clock clockNew) throws RemoteException{
 		clock = clockNew;		
-
 	}
 
 	public Registry getRegistry() {
@@ -206,7 +200,6 @@ public class Process extends UnicastRemoteObject implements IProcess {
 	public void setRegistry(Registry registry) {
 		this.registry = registry;
 	}
-
 
 	public int getProcessId() {
 		return processId;
@@ -237,7 +230,6 @@ public class Process extends UnicastRemoteObject implements IProcess {
 	            System.err.println("IOException: " + var4.getMessage());
 	        }
 	}
-
 
 	public int randomNumber(int min, int max){
 		Random r = new Random();

@@ -2,9 +2,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.util.Random;
 
-
 public class Test{
-
 	
 	static final int rPort = 1099;
 	static final int processNum = 5;
@@ -22,7 +20,7 @@ public class Test{
 			LocateRegistry.createRegistry(rPort);
 			for(int i=0;i<processNum;i++){
 				int processId = 1000 + i;
-				int broadcastRounds = randomNumber(0,3);
+				int broadcastRounds = randomNumber(0,3);;
 				Process process = new Process(rPort, processId, processNum, broadcastRounds);
 				process.notifyProcess();
 			}

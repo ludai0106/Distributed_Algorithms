@@ -43,10 +43,8 @@ public class Message implements Serializable{
 		this.sender = sender;
 	}
 
-
 	public String getReceiver() {
 		return receiver;
-
 	}
 
 	public void setReceiver(String receiver) {
