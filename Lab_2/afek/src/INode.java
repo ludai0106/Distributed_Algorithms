@@ -1,10 +1,8 @@
-
-
+//This is the interface
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Map;
 public interface INode extends Remote{
 	 public void registerNode() throws AccessException, RemoteException;

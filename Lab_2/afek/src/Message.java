@@ -1,5 +1,4 @@
 
-
 import java.io.Serializable;
 
 public class Message implements Serializable {
@@ -11,17 +10,16 @@ public class Message implements Serializable {
 
 	private int senderId;
 	private int receiverId;
-	private int levelSender;
-	private int levelReceiver;
+	private int senderLevel;
+	private int receiverLevel;
 	private boolean isAck;
 
 	public Message(boolean isAck, int sender, int receiver, int levelSender, int levelReceiver) {
 		this.isAck = isAck;
-		// this.agreeAck = agreeAck;
 		this.senderId = sender;
 		this.receiverId = receiver;
-		this.levelSender = levelSender;
-		this.levelReceiver = levelReceiver;
+		this.senderLevel = levelSender;
+		this.receiverLevel = levelReceiver;
 	}
 
 	public boolean isAck() {
@@ -30,22 +28,6 @@ public class Message implements Serializable {
 
 	public void setIsAck(boolean isAck) {
 		this.isAck = isAck;
-	}
-
-	public String toStringReceive() {
-		String s = receiverId + " receives message from " + senderId;
-		return s;
-	}
-
-	public String toStringBroadcast() {
-		String s = senderId + " sends a message to " + receiverId;
-		return s;
-	}
-
-	public String toStringAck() {
-		String s = receiverId + " receives a ack from " + senderId;
-		// String s= receiver + " sends a ack to " + sender;
-		return s;
 	}
 
 	public int getSender() {
@@ -60,24 +42,37 @@ public class Message implements Serializable {
 		return receiverId;
 	}
 
-	public int getLevelSender() {
-		return levelSender;
+	public int getSenderLevel() {
+		return senderLevel;
 	}
 
-	public void setLevelSender(int levelSender) {
-		this.levelSender = levelSender;
+	public void setSenderLevel(int levelSender) {
+		this.senderLevel = levelSender;
 	}
 
-	public int getLevelReceiver() {
-		return levelReceiver;
+	public int getReceiverLevel() {
+		return receiverLevel;
 	}
 
-	public void setLevelReceiver(int levelReceiver) {
-		this.levelReceiver = levelReceiver;
+	public void setReceiverLevel(int levelReceiver) {
+		this.receiverLevel = levelReceiver;
 	}
 
 	public void setReceiver(int receiver) {
 		this.receiverId = receiver;
+	}
+
+	public String toStringReceive() {
+		return receiverId + " receives message from " + senderId;
+	}
+
+	public String toStringSend() {
+		return senderId + " sends a message to " + receiverId;
+	}
+
+	public String toStringAck() {
+		return receiverId + " receives a ack from " + senderId;
+
 	}
 
 }

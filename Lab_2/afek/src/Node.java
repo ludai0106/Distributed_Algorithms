@@ -130,22 +130,23 @@ public class Node extends UnicastRemoteObject implements INode {
 		synchronized (this) {
 			buffer.add(message);
 
-			if ((message.getLevelSender() > this.getLevel()
-					|| message.getLevelSender() == this.getLevel() && message.getSender() >= this.getProcessId())) {
+			//Now just to make sure the order is correct, if is correct update the level and id and send back Ack.
+			if ((message.getSenderLevel() > this.getLevel()
+					|| message.getSenderLevel() == this.getLevel() && message.getSender() >= this.getProcessId())) {
 				String sender = Integer.toString(message.getSender());
 				INode nodeSender = this.getRemoteNode(sender);
 
-				System.out.println("I send a ack to " + sender);
+				System.out.println("I send a Ack to " + sender);
 				nodeSender.receiveAck(new Message(true, message.getReceiver(), message.getSender(),
-						message.getLevelReceiver(), message.getLevelSender()));
+						message.getReceiverLevel(), message.getSenderLevel()));
 
 				System.out.println("I changed my level=" + this.getLevel() + " and id=" + this.getProcessId() + " to: "
-						+ message.getLevelSender() + " and " + message.getSender());
-				this.setLevel(message.getLevelSender());
+						+ message.getSenderLevel() + " and " + message.getSender());
+				this.setLevel(message.getSenderLevel());
 				this.setProcessId(message.getSender());
 
 			} else {
-				System.out.println("I'm bigger, so you " + message.getSender() + " don't get a ack");
+				System.out.println(message.getSender() + " don't get a ack");
 			}
 		}
 	}
@@ -161,6 +162,8 @@ public class Node extends UnicastRemoteObject implements INode {
 		return true;
 	}
 
+	// RegisterNode only starts when the registry.list.length() are the same.
+	// So all threads starts at almost the same time
 	public void registerNode() throws AccessException, RemoteException {
 		Afek afek;
 		Thread thread;
@@ -171,11 +174,13 @@ public class Node extends UnicastRemoteObject implements INode {
 		}
 	}
 
-	public void broadcastMessage(Message message) {
-		String s = message.toStringBroadcast();
+	// This Only print it out but does nothing special
+	public void sendingMessageToLinks(Message message) {
+		String s = message.toStringSend();
 		System.out.println(s);
 	}
 
+	// To receive acknowledgement from others
 	public void receiveAck(Message message) {
 		if (message.isAck()) {
 			ackList.add(message);
