@@ -1,21 +1,19 @@
 import java.io.Serializable;
 
 public class Message implements Serializable {
-	
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4731898095466253355L;
-	//0 stands for N message
-	//1 stands for P message
-	private int type;
+	// 0 stands for N message
+	// 1 stands for P message
+	private char type;
 	private int w;
 	private int round;
 
-
-	public Message(int type, int w, int round) {
-
+	// (N,r,w)
+	public Message(char type, int round, int w) {
 		this.type = type;
 		this.w = w;
 		this.round = round;
@@ -25,7 +23,7 @@ public class Message implements Serializable {
 		return type;
 	}
 
-	public void setType(int type) {
+	public void setType(char type) {
 		this.type = type;
 	}
 

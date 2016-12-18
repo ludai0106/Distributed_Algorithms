@@ -9,7 +9,7 @@ public interface INode extends Remote {
 	
 	 public void registerNode() throws AccessException, RemoteException;
 //
-//	public void receiveAck(Message message) throws RemoteException;
+	public void receiveMessage(Message message) throws  AccessException, RemoteException, NotBoundException;
 //
 //	public int getPort() throws RemoteException;
 //

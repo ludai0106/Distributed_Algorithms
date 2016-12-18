@@ -8,7 +8,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-
+import java.util.Random;
 
 public class Node extends UnicastRemoteObject implements INode {
 
@@ -23,9 +23,15 @@ public class Node extends UnicastRemoteObject implements INode {
 	private boolean decided;
 	// the size of the network
 	private int size;
+	// Number of traitors
+	private int fNumber;
+	// Value given initially, for traitor it was 0, others 1
+	private int value;
+	// port number
 	private int port;
 	// level here represent how many nodes he captured
 	private int round;
+	// the nodeId
 	private int nodeId;
 	// Only for reference
 	private Registry registry;
@@ -33,29 +39,33 @@ public class Node extends UnicastRemoteObject implements INode {
 	private ArrayList<String> links;
 	// the OK message that send to you.
 	ArrayList<Message> messageList;
+	// Fort traitors is true
+	private boolean traitor;
 
-	//
 	boolean finished = false;
 
-	public Node(int size, int port, int nodeId) throws RemoteException, AlreadyBoundException {
-		// super();
+	public Node(int nodeId, int fNumber, int value, int size, int port) throws RemoteException, AlreadyBoundException {
 		this.port = port;
+		// decided =false at first
 		this.decided = false;
-
+		// round equals 1 at first
+		this.round = 1;
 		this.nodeId = nodeId;
-		
 		this.registry = LocateRegistry.getRegistry(port);
 		this.registry.bind(Integer.toString(nodeId), this);
-
 		this.size = size;
-		this.links = new ArrayList<String>();
-		this.messageList = new ArrayList<>();
-		
+		this.fNumber = fNumber;
+		this.value = value;
 
+		if (value == 0)
+			this.traitor = false;
+		else
+			this.traitor = true;
+
+		this.links = new ArrayList<>();
+		this.messageList = new ArrayList<>();
 	}
-	
-	
-	
+
 	// RegisterNode only starts when the registry.list.length() are the same.
 	// So all threads starts at almost the same time
 	public void registerNode() throws AccessException, RemoteException {
@@ -67,10 +77,7 @@ public class Node extends UnicastRemoteObject implements INode {
 			thread.start();
 		}
 	}
-	
 
-	
-	
 	// notify the rest about you
 	public void notifyOthers() throws AccessException, RemoteException, NotBoundException {
 		String[] nodes;
@@ -82,17 +89,65 @@ public class Node extends UnicastRemoteObject implements INode {
 		}
 
 	}
-	
-	
+
 	public INode getRemoteNode(String nodeStringId) throws AccessException, RemoteException, NotBoundException {
 		INode remoteNode = (INode) this.registry.lookup(nodeStringId);
 		return remoteNode;
 	}
 
+	// BroadCast one Message to all neighbors
+	public void broadCast(Message m) throws AccessException, RemoteException, NotBoundException {
+		// If we have enough Nodes in our Links
+		if (this.getLinks().size() == size - 1) {
+			for (String node : this.getLinks()) {
+				Random randomGenerator = new Random();
+				// if not a traitor
+				if (!this.isTraitor()) {
+					getRemoteNode(node).receiveMessage(m);
+				} else {// if a traitor then may not send message, here we
+						// use a 50:50 chance
+					boolean randomBool = randomGenerator.nextBoolean();
+					if (randomBool == true) {
+						getRemoteNode(node).receiveMessage(m);
+					}
+				}
+
+			}
+		} else {
+			System.out.println("Error: Not engouht Nodes in the Links");
+		}
+	}
+
+	// TODO:awit()
+	public void await() throws RemoteException {
+		while (true) {
+			if (countMessage(this.getRound()) >= this.getSize() - this.getfNumber()) {
+
+			}
+		}
+
+	}
+
+	// Count the message with a certain round.
+	public int countMessage(int round) {
+		int count = 0;
+		if (messageList.size() != 0) {
+			for (Message m : messageList) {
+				if (m.getRound() == round) {
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	public void receiveMessage(Message m) {
+		this.messageList.add(m);
+	}
+
 	public ArrayList<String> getLinks() {
 		return this.links;
 	}
-
 
 	public int getSize() {
 		return this.size;
@@ -107,7 +162,7 @@ public class Node extends UnicastRemoteObject implements INode {
 
 	}
 
-	public int getLevel() throws RemoteException {
+	public int getRound() throws RemoteException {
 		return this.round;
 	}
 
@@ -117,6 +172,10 @@ public class Node extends UnicastRemoteObject implements INode {
 
 	public void setDecided(boolean decided) {
 		this.decided = decided;
+	}
+
+	public void nodeDecided() {
+		setDecided(true);
 	}
 
 	public int getNodeId() throws RemoteException {
@@ -131,14 +190,33 @@ public class Node extends UnicastRemoteObject implements INode {
 		return this.registry;
 	}
 
-	public void setLevel(int level) {
-		this.round = level;
+	public void setRound(int round) {
+		this.round = round;
 	}
 
-	public void increaseLevel() {
+	public void increaseRound() {
 		this.round = this.round + 1;
 	}
 
+	public int getfNumber() {
+		return this.fNumber;
+	}
 
+	public void setfNumber(int num) {
+		this.fNumber = num;
+	}
 
+	public int getValue() {
+		return this.value;
+	}
+
+	public void setValue(int value) {
+		this.value = value;
+
+	}
+
+	public boolean isTraitor() {
+		return !(this.traitor);
+
+	}
 }
