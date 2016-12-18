@@ -11,18 +11,6 @@ public interface INode extends Remote {
 //
 	public void receiveMessage(Message message) throws  AccessException, RemoteException, NotBoundException;
 //
-//	public int getPort() throws RemoteException;
-//
-//	public int getLevel() throws RemoteException;
-//	
-//	public int getNodeId() throws RemoteException;
-//	
-//	public void setNodeId(int id) throws RemoteException;
-//	
-//	public int getOriginNodeId() throws RemoteException;
-//
-//	public void receiveMessage(Message m) throws AccessException, RemoteException, NotBoundException;
-//
-//	public int getStatus() throws RemoteException;
+
 
 }

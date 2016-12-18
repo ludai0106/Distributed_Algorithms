@@ -22,9 +22,9 @@ public class Node extends UnicastRemoteObject implements INode {
 	// Get killed will make status change from `1` to `0`
 	private boolean decided;
 	// the size of the network
-	private int size;
+	private final int size;
 	// Number of traitors
-	private int fNumber;
+	private final int fNumber;
 	// Value given initially, for traitor it was 0, others 1
 	private int value;
 	// port number
@@ -118,22 +118,46 @@ public class Node extends UnicastRemoteObject implements INode {
 		}
 	}
 
-	// TODO:awit()
-	public void await() throws RemoteException {
+	// Make Node sleep until we got the number of message we want
+	public void await(int round, char type) throws RemoteException, InterruptedException {
 		while (true) {
-			if (countMessage(this.getRound()) >= this.getSize() - this.getfNumber()) {
-
+			// await : n-f message
+			if (countMessage(type, round) >= this.getSize() - this.getfNumber()) {
+				break;
+			} else {
+				Thread.sleep(200);
 			}
 		}
 
 	}
 
-	// Count the message with a certain round.
-	public int countMessage(int round) {
+	public int countMaxMessage(char type, int round) {
+		return Math.max(countMessage(type, round, 0), countMessage(type, round, 1));
+	}
+
+	public int getMaxMessageValue(char type, int round) {
+		return (countMessage(type, round, 0) > countMessage(type, round, 1)) ? 0 : 1;
+	}
+
+	// Count the message with a certain round and certain type.
+	public int countMessage(char type, int round) {
 		int count = 0;
 		if (messageList.size() != 0) {
 			for (Message m : messageList) {
-				if (m.getRound() == round) {
+				if (m.getType() == type && m.getRound() == round) {
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	// Count the message with a certain round, certain type and certain value.
+	public int countMessage(char type, int round, int value) {
+		int count = 0;
+		if (messageList.size() != 0) {
+			for (Message m : messageList) {
+				if (m.getType() == type && m.getRound() == round && m.getW() == value) {
 					count++;
 				}
 			}
@@ -202,9 +226,6 @@ public class Node extends UnicastRemoteObject implements INode {
 		return this.fNumber;
 	}
 
-	public void setfNumber(int num) {
-		this.fNumber = num;
-	}
 
 	public int getValue() {
 		return this.value;
