@@ -4,9 +4,9 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
 public class Test {
-	static final int networkSize = 21;
+	static final int networkSize = 100;
 	static int rPort = 1099;
-	static int f = 4;
+	static int f = 10;
 
 	public static void main(String args[]) throws RemoteException, AlreadyBoundException, NotBoundException {
 		if (args == null || args.length == 0) {
