@@ -19,7 +19,7 @@ public class Message implements Serializable {
 		this.round = round;
 	}
 
-	public int getType() {
+	public char getType() {
 		return type;
 	}
 

@@ -69,11 +69,11 @@ public class Node extends UnicastRemoteObject implements INode {
 	// RegisterNode only starts when the registry.list.length() are the same.
 	// So all threads starts at almost the same time
 	public void registerNode() throws AccessException, RemoteException {
-		Byzantine afek;
+		Byzantine byzan;
 		Thread thread;
 		if (registry.list().length == this.size) {
-			afek = new Byzantine(this);
-			thread = new Thread(afek);
+			byzan = new Byzantine(this);
+			thread = new Thread(byzan);
 			thread.start();
 		}
 	}
@@ -98,7 +98,7 @@ public class Node extends UnicastRemoteObject implements INode {
 	// BroadCast one Message to all neighbors
 	public void broadCast(Message m) throws AccessException, RemoteException, NotBoundException {
 		// If we have enough Nodes in our Links
-		if (this.getLinks().size() == size - 1) {
+		if (this.getLinks().size() >= size - 1) {
 			for (String node : this.getLinks()) {
 				Random randomGenerator = new Random();
 				// if not a traitor
@@ -165,8 +165,13 @@ public class Node extends UnicastRemoteObject implements INode {
 		return count;
 	}
 
+	public void decideAnounce() {
+		System.out.format("node %d decided on %d in round %d\n", nodeId, value, round);
+	}
+
 	public void receiveMessage(Message m) {
 		this.messageList.add(m);
+//		System.out.println(nodeId + "receive Message\t round="+ m.getRound()+"\t type =\t"+ m.getType()+"\t value="+m.getW());
 	}
 
 	public ArrayList<String> getLinks() {
@@ -225,7 +230,6 @@ public class Node extends UnicastRemoteObject implements INode {
 	public int getfNumber() {
 		return this.fNumber;
 	}
-
 
 	public int getValue() {
 		return this.value;

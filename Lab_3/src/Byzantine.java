@@ -19,7 +19,7 @@ public class Byzantine implements Runnable {
 			String[] allNodes = node.getRegistry().list();
 			// Complete graph.
 			for (String id : allNodes) {
-				if (!id.equals(Integer.toString(node.getNodeId())))
+				//if (!id.equals(Integer.toString(node.getNodeId())))
 					node.getLinks().add(id);
 			}
 			// do forever
@@ -30,9 +30,13 @@ public class Byzantine implements Runnable {
 				int f = node.getfNumber();
 				Message mN = new Message(N, round, value);
 				node.broadCast(mN);
-
+				
+//				System.out.println(node.getNodeId()+":Waiting for N...");
+				
 				// await n−f messages of the form (N;r,*)
 				node.await(round, N);
+				
+//				System.out.println(node.getNodeId()+":Waiting for N over...");
 
 				// if(>(n+f)/2 messages (N;r,w) received with w=0 or 1)then
 				if (node.countMaxMessage(N, round) > (node.getSize() + f) / 2.0) {
@@ -52,7 +56,11 @@ public class Byzantine implements Runnable {
 					break;
 				} else {
 					// else await n−f messages of the form (P,r,*)
+//					System.out.println(node.getNodeId()+":Waiting for P...");
+					
 					node.await(round, P);
+					
+//					System.out.println(node.getNodeId()+":Waiting for P over...");
 				}
 				// if (> f messages (P;r,w) received with w=0 or 1) then
 				if (node.countMaxMessage(P, round) > f) {
@@ -63,21 +71,24 @@ public class Byzantine implements Runnable {
 					if (node.countMessage(P, round, value) > 3.0 * f) {
 						// decide w; decide true
 						node.setDecided(true);
+						node.decideAnounce();
 					}
 					// else v ← random(0,1)
 					else {
 						node.setValue(randomNumber(0, 1));
 						value = node.getValue();
+						
 					}
 					// r←r+1
 					node.increaseRound();
+					Thread.sleep(200);
 
 				}
 
 			}
 
 		} catch (Exception e) {
-			System.out.println("Exception in Afek " + e);
+			System.out.println("Exception in Byzantine " + e);
 		}
 	}
 
