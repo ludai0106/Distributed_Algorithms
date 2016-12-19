@@ -37,14 +37,25 @@ public class Node extends UnicastRemoteObject implements INode {
 	private Registry registry;
 	// nodes you haven't send a message to
 	private ArrayList<String> links;
-	// the OK message that send to you.
+	// the message that send to you.
 	ArrayList<Message> messageList;
+	//
+	ArrayList<Message> messageCountList;
 	// Fort traitors is true
 	private boolean traitor;
 
+	//
+	boolean traitorRandomMessage;
+
+	boolean traitorDoNotSendMessage;
+
+	// useless
+	boolean receiveMessage = true;
+
 	boolean finished = false;
 
-	public Node(int nodeId, int fNumber, int value, int size, int port) throws RemoteException, AlreadyBoundException {
+	public Node(int nodeId, int fNumber, int value, int size, int port, boolean traitorRandomMessage,
+			boolean traitorDoNotSendMessage) throws RemoteException, AlreadyBoundException {
 		this.port = port;
 		// decided =false at first
 		this.decided = false;
@@ -104,11 +115,17 @@ public class Node extends UnicastRemoteObject implements INode {
 				// if not a traitor
 				if (!this.isTraitor()) {
 					getRemoteNode(node).receiveMessage(m);
-				} else {// if a traitor then may not send message, here we
-						// use a 50:50 chance
+				} else if (!traitorDoNotSendMessage) {// if a traitor then may
+														// not send message,
+														// here we
+					// use a 50:50 chance
 					boolean randomBool = randomGenerator.nextBoolean();
-					if (randomBool == true) {
+					if (randomBool == true && !traitorRandomMessage) {
 						getRemoteNode(node).receiveMessage(m);
+					} else if (randomBool == true && traitorRandomMessage) {
+						m.setW(randomNumber(0, 100));
+						getRemoteNode(node).receiveMessage(m);
+
 					}
 				}
 
@@ -118,8 +135,14 @@ public class Node extends UnicastRemoteObject implements INode {
 		}
 	}
 
+	public static int randomNumber(int min, int max) {
+		Random r = new Random();
+		return r.nextInt(max + 1 - min) + min;
+	}
+
 	// Make Node sleep until we got the number of message we want
 	public void await(int round, char type) throws RemoteException, InterruptedException {
+		setReceiveMessageFalse();
 		while (true) {
 			// await : n-f message
 			if (countMessage(type, round) >= this.getSize() - this.getfNumber()) {
@@ -131,16 +154,24 @@ public class Node extends UnicastRemoteObject implements INode {
 
 	}
 
-	public int countMaxMessage(char type, int round) {
+	public void setReceiveMessageTrue() {
+		this.receiveMessage = true;
+	}
+
+	public void setReceiveMessageFalse() {
+		this.receiveMessage = false;
+	}
+
+	public synchronized int countMaxMessage(char type, int round) {
 		return Math.max(countMessage(type, round, 0), countMessage(type, round, 1));
 	}
 
-	public int getMaxMessageValue(char type, int round) {
+	public synchronized int getMaxMessageValue(char type, int round) {
 		return (countMessage(type, round, 0) > countMessage(type, round, 1)) ? 0 : 1;
 	}
 
 	// Count the message with a certain round and certain type.
-	public int countMessage(char type, int round) {
+	public synchronized int countMessage(char type, int round) {
 		int count = 0;
 		if (messageList.size() != 0) {
 			for (Message m : messageList) {
@@ -153,7 +184,7 @@ public class Node extends UnicastRemoteObject implements INode {
 	}
 
 	// Count the message with a certain round, certain type and certain value.
-	public int countMessage(char type, int round, int value) {
+	public synchronized int countMessage(char type, int round, int value) {
 		int count = 0;
 		if (messageList.size() != 0) {
 			for (Message m : messageList) {
@@ -169,9 +200,12 @@ public class Node extends UnicastRemoteObject implements INode {
 		System.out.format("node %d decided on %d in round %d\n", nodeId, value, round);
 	}
 
-	public void receiveMessage(Message m) {
+	public synchronized void receiveMessage(Message m) {
+		// if (this.receiveMessage)
 		this.messageList.add(m);
-//		System.out.println(nodeId + "receive Message\t round="+ m.getRound()+"\t type =\t"+ m.getType()+"\t value="+m.getW());
+		// System.out.println(nodeId + "receive Message\t round=" + m.getRound()
+		// + "\t type =\t" + m.getType()
+		// + "\t value=" + m.getW());
 	}
 
 	public ArrayList<String> getLinks() {
