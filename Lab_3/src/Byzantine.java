@@ -15,16 +15,35 @@ public class Byzantine implements Runnable {
 	@Override
 	public void run() {
 		try {
+			if (node.getClock().getIndex() + 1 == node.getSize())
+				System.out.println(node.getNodeId() + ": I start running");
 			String[] allNodes = node.getRegistry().list();
 			// Complete graph.
 			for (String id : allNodes) {
 				// if (!id.equals(Integer.toString(node.getNodeId())))
 				node.getLinks().add(id);
 			}
+
+			// Set to true
+			node.setStart(true);
+
+			// Change: if two machines
+			if (node.getClock().getIndex() + 1 != node.getSize()) {
+				while (!node.getRemoteNode(Integer.toString(node.getSize() + 1000)).getStart()) {
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
 			// do forever
 			while (true) {
 				// broadcast(N;r,v)
 
+				if (node.getClock().getIndex() + 1 == node.getSize())
+					System.out.println(node.getNodeId() + ": I enter while");
 				int round = node.getRound();
 				int value = node.getValue();
 				int f = node.getfNumber();
@@ -46,6 +65,7 @@ public class Byzantine implements Runnable {
 
 					Message mP = new Message(P, round, node.getMaxMessageValue(N, round));
 					node.broadCast(mP);
+
 				} else {
 					// else broadcast(P;r,?), broadCast whatEvery, so we choose
 					// 1 magic number between 0 and 100
@@ -89,18 +109,20 @@ public class Byzantine implements Runnable {
 				// r←r+1
 				synchronized (this) {
 					node.increaseRound();
+					if (node.getClock().getIndex() + 1 == node.getSize())
+						System.out.println(node.getNodeId() + ": I enter this");
 					if (node.synchronous) {
 						// First tell others our time
 						node.broadcastClock();
 						// Wait till every one has their time
-						while (node.clockList.size() < node.getSize()) {
+						while (node.clockList.size() < node.getSize()-1) {
 							try {
 								Thread.sleep(200);
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
-							System.out.println(node.getNodeId() + " : " + node.clockList.size());
-							for (int i = 1; i <= node.getSize(); i++) {
+							System.out.println(node.getNodeId() + " : clockList " + node.clockList.size());
+							for (int i = 0; i < node.getSize(); i++) {
 								boolean found = false;
 								for (Clock c : node.clockList) {
 									if (i == c.getIndex()) {

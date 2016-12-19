@@ -46,8 +46,8 @@ public class Clock implements Serializable {
 		}
 	}
 
-	//We have to me smaller or equal to this clock so we can go to next round. 
-	//If we got larger clock, stop here!
+	// We have to me smaller or equal to this clock so we can go to next round.
+	// If we got larger clock, stop here!
 	public boolean nextRoundCondition(Clock c) {
 		return !indexLarger(c);
 	}

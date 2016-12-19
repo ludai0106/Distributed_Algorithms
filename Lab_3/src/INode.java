@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
 //Interface
 public interface INode extends Remote {
 
-	public void registerNode() throws AccessException, RemoteException;
+	public void registerNode() throws AccessException, RemoteException, NotBoundException;
 
 	//
 	public void receiveMessage(Message message) throws AccessException, RemoteException, NotBoundException;
@@ -15,4 +15,8 @@ public interface INode extends Remote {
 	public void receiveClock(Clock c) throws RemoteException;
 
 	public Clock getClock() throws RemoteException;
+	
+	public boolean getStart() throws RemoteException;
+	
+	public void setStart(boolean start) throws RemoteException ;
 }

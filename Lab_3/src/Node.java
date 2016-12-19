@@ -61,6 +61,8 @@ public class Node extends UnicastRemoteObject implements INode {
 	// delay value set by user
 	private int delay;
 
+	public boolean start = false;
+
 	private Clock clock;
 
 	// Default constructor
@@ -86,7 +88,7 @@ public class Node extends UnicastRemoteObject implements INode {
 		this.messageList = new ArrayList<>();
 		this.clockList = new ArrayList<>();
 		// Initialize the clock vector
-		this.clock = new Clock(size, index);
+		this.clock = new Clock(size, index - 1);
 		this.synchronous = synchronous;
 
 	}
@@ -102,10 +104,15 @@ public class Node extends UnicastRemoteObject implements INode {
 
 	// RegisterNode only starts when the registry.list.length() are the same.
 	// So all threads starts at almost the same time
-	public void registerNode() throws AccessException, RemoteException {
+	public void registerNode() throws AccessException, RemoteException, NotBoundException {
 		Byzantine byzan;
 		Thread thread;
+		// Change: if two machines
 		if (registry.list().length == this.size) {
+
+			if (this.getClock().getIndex() + 1 == this.getSize())
+				System.out.println(this.getNodeId() + ": I start" + registry.list().length);
+
 			byzan = new Byzantine(this);
 			thread = new Thread(byzan);
 			thread.start();
@@ -121,6 +128,10 @@ public class Node extends UnicastRemoteObject implements INode {
 			INode remoteNode = getRemoteNode(nodeName);
 			remoteNode.registerNode();
 			System.out.println(this.getNodeId() + ":\tNotified node: " + nodeName);
+
+			// if (this.getClock().getIndex() == this.getSize())
+			// System.out.println(this.getNodeId() + ": I register" +
+			// registry.list().length);
 		}
 
 	}
@@ -134,6 +145,8 @@ public class Node extends UnicastRemoteObject implements INode {
 	// BroadCast one Message to all neighbors
 	public void broadCast(Message m) throws AccessException, RemoteException, NotBoundException {
 		// If we have enough Nodes in our Links
+		if (getNodeId() == size)
+			System.out.println(getNodeId() + ": I broadcast");
 		if (this.getLinks().size() >= size - 1) {
 			for (String node : this.getLinks()) {
 				Random randomGenerator = new Random();
@@ -274,6 +287,14 @@ public class Node extends UnicastRemoteObject implements INode {
 		// System.out.println(nodeId + "receive Message\t round=" + m.getRound()
 		// + "\t type =\t" + m.getType()
 		// + "\t value=" + m.getW());
+	}
+
+	public boolean getStart() throws RemoteException {
+		return this.start;
+	}
+
+	public void setStart(boolean start) throws RemoteException {
+		this.start = start;
 	}
 
 	public ArrayList<String> getLinks() {
