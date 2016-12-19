@@ -56,9 +56,10 @@ public class Node extends UnicastRemoteObject implements INode {
 
 	// useless
 	boolean finished = false;
-	//
+	// delay value set by user
 	private int delay;
 
+	// Default constructor
 	public Node(int nodeId, int fNumber, int value, int size, int port, boolean traitorRandomMessage,
 			boolean traitorDoNotSendMessage, int delay) throws RemoteException, AlreadyBoundException {
 		this.port = port;
@@ -84,6 +85,7 @@ public class Node extends UnicastRemoteObject implements INode {
 		this.messageList = new ArrayList<>();
 	}
 
+	// Create a random delay based on the delay value given.
 	public void randomDelay() {
 		try {
 			Thread.sleep(randomNumber(0, delay));
@@ -118,6 +120,7 @@ public class Node extends UnicastRemoteObject implements INode {
 
 	}
 
+	// get the remote Node based on the nodeId.
 	public INode getRemoteNode(String nodeStringId) throws AccessException, RemoteException, NotBoundException {
 		INode remoteNode = (INode) this.registry.lookup(nodeStringId);
 		return remoteNode;
@@ -155,6 +158,7 @@ public class Node extends UnicastRemoteObject implements INode {
 		}
 	}
 
+	// Create a randome num [min, max]
 	public static int randomNumber(int min, int max) {
 		Random r = new Random();
 		return r.nextInt(max + 1 - min) + min;
@@ -173,7 +177,10 @@ public class Node extends UnicastRemoteObject implements INode {
 
 	}
 
-	// public boolean
+	// TODO:
+	public boolean waitUntilSameRound() {
+		return true;
+	}
 
 	public void setReceiveMessageTrue() {
 		this.receiveMessage = true;
@@ -183,10 +190,13 @@ public class Node extends UnicastRemoteObject implements INode {
 		this.receiveMessage = false;
 	}
 
+	// Return the number of the larger value
 	public synchronized int countMaxMessage(char type, int round) {
 		return Math.max(countMessage(type, round, 0), countMessage(type, round, 1));
 	}
 
+	// Return the larger value of the two, we don't consider the other value,
+	// since n>5f, the majority are correct process
 	public synchronized int getMaxMessageValue(char type, int round) {
 		return (countMessage(type, round, 0) > countMessage(type, round, 1)) ? 0 : 1;
 	}
@@ -217,11 +227,13 @@ public class Node extends UnicastRemoteObject implements INode {
 		return count;
 	}
 
+	// Print out the decided value in certain round
 	public void decideAnounce() {
 		randomDelay();
 		System.out.format("node %d decided on %d in round %d\n", nodeId, value, round);
 	}
 
+	// Add one message into the message List
 	public synchronized void receiveMessage(Message m) {
 		// if (this.receiveMessage)
 		randomDelay();

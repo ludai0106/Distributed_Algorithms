@@ -4,17 +4,26 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
 public class Test {
-	static final int networkSize = 15;
+
+	static boolean easyMode = false;
+
+	static int networkSize = 15;
 	static int rPort = 1099;
 	static int f = 1;
-
 	static boolean traitorRandomMessage = true;
-
 	static boolean traitorDoNotSendMessage = false;
-
 	static int delay = 100;
 
 	public static void main(String args[]) throws RemoteException, AlreadyBoundException, NotBoundException {
+		// Configurations for easyMode
+		if (easyMode) {
+			networkSize = 6;
+			f = 1;
+			traitorRandomMessage = false;
+			traitorDoNotSendMessage = false;
+			delay = 0;
+		}
+
 		if (args == null || args.length == 0) {
 			LocateRegistry.createRegistry(rPort);
 			for (int i = 1; i <= networkSize; i++) {
