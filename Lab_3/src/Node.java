@@ -41,21 +41,26 @@ public class Node extends UnicastRemoteObject implements INode {
 	ArrayList<Message> messageList;
 	//
 	ArrayList<Message> messageCountList;
-	// Fort traitors is true
+	// For traitors is true
 	private boolean traitor;
 
-	//
+	// If true, traitor will send random message instead of message with its own
+	// value
 	boolean traitorRandomMessage;
-
+	// If true, traitor will not send messages at all,
+	// If false, traitor will have a 50% chance of sending a message
 	boolean traitorDoNotSendMessage;
 
 	// useless
 	boolean receiveMessage = true;
 
+	// useless
 	boolean finished = false;
+	//
+	private int delay;
 
 	public Node(int nodeId, int fNumber, int value, int size, int port, boolean traitorRandomMessage,
-			boolean traitorDoNotSendMessage) throws RemoteException, AlreadyBoundException {
+			boolean traitorDoNotSendMessage, int delay) throws RemoteException, AlreadyBoundException {
 		this.port = port;
 		// decided =false at first
 		this.decided = false;
@@ -67,7 +72,9 @@ public class Node extends UnicastRemoteObject implements INode {
 		this.size = size;
 		this.fNumber = fNumber;
 		this.value = value;
-
+		this.traitorRandomMessage = traitorRandomMessage;
+		this.traitorDoNotSendMessage = traitorDoNotSendMessage;
+		this.delay = delay;
 		if (value == 0)
 			this.traitor = false;
 		else
@@ -75,6 +82,15 @@ public class Node extends UnicastRemoteObject implements INode {
 
 		this.links = new ArrayList<>();
 		this.messageList = new ArrayList<>();
+	}
+
+	public void randomDelay() {
+		try {
+			Thread.sleep(randomNumber(0, delay));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	// RegisterNode only starts when the registry.list.length() are the same.
@@ -91,6 +107,7 @@ public class Node extends UnicastRemoteObject implements INode {
 
 	// notify the rest about you
 	public void notifyOthers() throws AccessException, RemoteException, NotBoundException {
+		randomDelay();
 		String[] nodes;
 		nodes = this.registry.list();
 		for (String nodeName : nodes) {
@@ -112,6 +129,7 @@ public class Node extends UnicastRemoteObject implements INode {
 		if (this.getLinks().size() >= size - 1) {
 			for (String node : this.getLinks()) {
 				Random randomGenerator = new Random();
+				randomDelay();
 				// if not a traitor
 				if (!this.isTraitor()) {
 					getRemoteNode(node).receiveMessage(m);
@@ -121,8 +139,10 @@ public class Node extends UnicastRemoteObject implements INode {
 					// use a 50:50 chance
 					boolean randomBool = randomGenerator.nextBoolean();
 					if (randomBool == true && !traitorRandomMessage) {
+						// m sending message of it is given
 						getRemoteNode(node).receiveMessage(m);
 					} else if (randomBool == true && traitorRandomMessage) {
+						// random message
 						m.setW(randomNumber(0, 100));
 						getRemoteNode(node).receiveMessage(m);
 
@@ -142,7 +162,6 @@ public class Node extends UnicastRemoteObject implements INode {
 
 	// Make Node sleep until we got the number of message we want
 	public void await(int round, char type) throws RemoteException, InterruptedException {
-		setReceiveMessageFalse();
 		while (true) {
 			// await : n-f message
 			if (countMessage(type, round) >= this.getSize() - this.getfNumber()) {
@@ -153,6 +172,8 @@ public class Node extends UnicastRemoteObject implements INode {
 		}
 
 	}
+
+	// public boolean
 
 	public void setReceiveMessageTrue() {
 		this.receiveMessage = true;
@@ -197,11 +218,13 @@ public class Node extends UnicastRemoteObject implements INode {
 	}
 
 	public void decideAnounce() {
+		randomDelay();
 		System.out.format("node %d decided on %d in round %d\n", nodeId, value, round);
 	}
 
 	public synchronized void receiveMessage(Message m) {
 		// if (this.receiveMessage)
+		randomDelay();
 		this.messageList.add(m);
 		// System.out.println(nodeId + "receive Message\t round=" + m.getRound()
 		// + "\t type =\t" + m.getType()

@@ -13,7 +13,7 @@ public class Byzantine implements Runnable {
 	}
 
 	@Override
-	public synchronized void run() {
+	public  void run() {
 		try {
 			String[] allNodes = node.getRegistry().list();
 			// Complete graph.
