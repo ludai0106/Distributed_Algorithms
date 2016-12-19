@@ -14,6 +14,7 @@ public class Test {
 	static boolean traitorRandomMessage = true;
 	static boolean traitorDoNotSendMessage = false;
 	static int delay = 0;
+	static boolean synchronous = true;
 
 	public static void main(String args[]) throws RemoteException, AlreadyBoundException, NotBoundException {
 		// Configurations for easyMode
@@ -30,12 +31,13 @@ public class Test {
 			for (int i = 1; i <= networkSize; i++) {
 				int nodeId = 1000 + i;
 				Node node;
-				if (i <= networkSize - f)
+				if (i <= networkSize - f) {
 					node = new Node(nodeId, f, randomNumber(0, 1), true, networkSize, rPort, traitorRandomMessage,
-							traitorDoNotSendMessage, delay, i);
-				else
+							traitorDoNotSendMessage, delay, i, synchronous);
+				} else {
 					node = new Node(nodeId, f, 0, false, networkSize, rPort, traitorRandomMessage,
-							traitorDoNotSendMessage, delay, i);
+							traitorDoNotSendMessage, delay, i, synchronous);
+				}
 				node.notifyOthers();
 				System.out.println(node.getNodeId() + ":\tWaiting for the incoming messages...");
 			}

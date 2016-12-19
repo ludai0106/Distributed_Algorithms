@@ -13,7 +13,7 @@ public class Byzantine implements Runnable {
 	}
 
 	@Override
-	public  void run() {
+	public void run() {
 		try {
 			String[] allNodes = node.getRegistry().list();
 			// Complete graph.
@@ -87,7 +87,43 @@ public class Byzantine implements Runnable {
 
 				}
 				// r←r+1
-				node.increaseRound();
+				synchronized (this) {
+					node.increaseRound();
+					if (node.synchronous) {
+						// First tell others our time
+						node.broadcastClock();
+						// Wait till every one has their time
+						while (node.clockList.size() < node.getSize()) {
+							try {
+								Thread.sleep(200);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							System.out.println(node.getNodeId() + " : " + node.clockList.size());
+							for (int i = 1; i <= node.getSize(); i++) {
+								boolean found = false;
+								for (Clock c : node.clockList) {
+									if (i == c.getIndex()) {
+										found = true;
+										break;
+									}
+								}
+								if (!found && i != node.getClock().getIndex()) {
+									System.out.println(node.getNodeId() + ": Missing " + i);
+								} else {
+									found = false;
+								}
+
+							}
+						}
+						// Now it's time to break
+						while (!node.waitUntilSameRound()) {
+							Thread.sleep(200);
+						}
+					}
+
+					node.clockList.clear();
+				}
 				Thread.sleep(200);
 
 			}

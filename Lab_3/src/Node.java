@@ -40,7 +40,7 @@ public class Node extends UnicastRemoteObject implements INode {
 	// the message that send to you.
 	ArrayList<Message> messageList;
 	//
-	ArrayList<Message> messageCountList;
+	ArrayList<Clock> clockList;
 	// For traitors is true
 	private boolean traitor;
 
@@ -50,6 +50,8 @@ public class Node extends UnicastRemoteObject implements INode {
 	// If true, traitor will not send messages at all,
 	// If false, traitor will have a 50% chance of sending a message
 	boolean traitorDoNotSendMessage;
+	// True, we may need to use Clock
+	boolean synchronous;
 
 	// // useless
 	// boolean receiveMessage = true;
@@ -63,7 +65,8 @@ public class Node extends UnicastRemoteObject implements INode {
 
 	// Default constructor
 	public Node(int nodeId, int fNumber, int value, boolean traitor, int size, int port, boolean traitorRandomMessage,
-			boolean traitorDoNotSendMessage, int delay, int index) throws RemoteException, AlreadyBoundException {
+			boolean traitorDoNotSendMessage, int delay, int index, boolean synchronous)
+			throws RemoteException, AlreadyBoundException {
 		this.port = port;
 		// decided =false at first
 		this.decided = false;
@@ -78,14 +81,13 @@ public class Node extends UnicastRemoteObject implements INode {
 		this.traitorRandomMessage = traitorRandomMessage;
 		this.traitorDoNotSendMessage = traitorDoNotSendMessage;
 		this.delay = delay;
-		
 		this.traitor = traitor;
-
 		this.links = new ArrayList<>();
 		this.messageList = new ArrayList<>();
-
+		this.clockList = new ArrayList<>();
 		// Initialize the clock vector
 		this.clock = new Clock(size, index);
+		this.synchronous = synchronous;
 
 	}
 
@@ -94,7 +96,6 @@ public class Node extends UnicastRemoteObject implements INode {
 		try {
 			Thread.sleep(randomNumber(0, delay));
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -183,19 +184,43 @@ public class Node extends UnicastRemoteObject implements INode {
 
 	// TODO:
 	public boolean waitUntilSameRound() throws AccessException, RemoteException, NotBoundException {
+
+		// Now we need to make sure we are slower than others
+		boolean result = true;
 		for (String node : links) {
-			getRemoteNode(node);
+			result = result && this.getClock().nextRoundCondition(getRemoteNode(node).getClock());
+			if (!result)
+				return false;
 		}
-		return true;
+		return result;
+
 	}
 
-	// public void setReceiveMessageTrue() {
-	// this.receiveMessage = true;
-	// }
-	//
-	// public void setReceiveMessageFalse() {
-	// this.receiveMessage = false;
-	// }
+	public void broadcastClock() throws AccessException, RemoteException, NotBoundException {
+		int flag = 0;
+		for (String node : links) {
+			if (!node.equals(Integer.toString(this.getNodeId()))) {
+				getRemoteNode(node).receiveClock(this.clock);
+				flag++;
+			}
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		System.out.println(this.getNodeId() + ": already sent" + flag);
+	}
+
+	public synchronized void receiveClock(Clock c) throws RemoteException {
+		clockList.add(c);
+		// update our index if we are smaller than theirs
+		if (getClock().sameIndexSmaller(c)) {
+			getClock().update(c);
+		}
+	}
 
 	// Return the number of the larger value
 	public synchronized int countMaxMessage(char type, int round) {
@@ -229,6 +254,7 @@ public class Node extends UnicastRemoteObject implements INode {
 				if (m.getType() == type && m.getRound() == round && m.getW() == value) {
 					count++;
 				}
+
 			}
 		}
 		return count;
@@ -252,6 +278,10 @@ public class Node extends UnicastRemoteObject implements INode {
 
 	public ArrayList<String> getLinks() {
 		return this.links;
+	}
+
+	public Clock getClock() throws RemoteException {
+		return this.clock;
 	}
 
 	public int getSize() {
@@ -301,7 +331,8 @@ public class Node extends UnicastRemoteObject implements INode {
 
 	public void increaseRound() throws RemoteException {
 		this.round = this.round + 1;
-		System.out.println(getNodeId() + ":Round increase, with value"+ getValue());
+		this.clock.incrementIndex();
+		System.out.println(getNodeId() + ":Round increase, with value" + getValue());
 	}
 
 	public int getfNumber() {
