@@ -51,17 +51,19 @@ public class Node extends UnicastRemoteObject implements INode {
 	// If false, traitor will have a 50% chance of sending a message
 	boolean traitorDoNotSendMessage;
 
-	// useless
-	boolean receiveMessage = true;
+	// // useless
+	// boolean receiveMessage = true;
+	// // useless
+	// boolean finished = false;
 
-	// useless
-	boolean finished = false;
 	// delay value set by user
 	private int delay;
 
+	private Clock clock;
+
 	// Default constructor
-	public Node(int nodeId, int fNumber, int value, int size, int port, boolean traitorRandomMessage,
-			boolean traitorDoNotSendMessage, int delay) throws RemoteException, AlreadyBoundException {
+	public Node(int nodeId, int fNumber, int value, boolean traitor, int size, int port, boolean traitorRandomMessage,
+			boolean traitorDoNotSendMessage, int delay, int index) throws RemoteException, AlreadyBoundException {
 		this.port = port;
 		// decided =false at first
 		this.decided = false;
@@ -76,13 +78,15 @@ public class Node extends UnicastRemoteObject implements INode {
 		this.traitorRandomMessage = traitorRandomMessage;
 		this.traitorDoNotSendMessage = traitorDoNotSendMessage;
 		this.delay = delay;
-		if (value == 0)
-			this.traitor = false;
-		else
-			this.traitor = true;
+		
+		this.traitor = traitor;
 
 		this.links = new ArrayList<>();
 		this.messageList = new ArrayList<>();
+
+		// Initialize the clock vector
+		this.clock = new Clock(size, index);
+
 	}
 
 	// Create a random delay based on the delay value given.
@@ -158,7 +162,7 @@ public class Node extends UnicastRemoteObject implements INode {
 		}
 	}
 
-	// Create a randome num [min, max]
+	// Create a random number between [min, max]
 	public static int randomNumber(int min, int max) {
 		Random r = new Random();
 		return r.nextInt(max + 1 - min) + min;
@@ -178,17 +182,20 @@ public class Node extends UnicastRemoteObject implements INode {
 	}
 
 	// TODO:
-	public boolean waitUntilSameRound() {
+	public boolean waitUntilSameRound() throws AccessException, RemoteException, NotBoundException {
+		for (String node : links) {
+			getRemoteNode(node);
+		}
 		return true;
 	}
 
-	public void setReceiveMessageTrue() {
-		this.receiveMessage = true;
-	}
-
-	public void setReceiveMessageFalse() {
-		this.receiveMessage = false;
-	}
+	// public void setReceiveMessageTrue() {
+	// this.receiveMessage = true;
+	// }
+	//
+	// public void setReceiveMessageFalse() {
+	// this.receiveMessage = false;
+	// }
 
 	// Return the number of the larger value
 	public synchronized int countMaxMessage(char type, int round) {
@@ -292,8 +299,9 @@ public class Node extends UnicastRemoteObject implements INode {
 		this.round = round;
 	}
 
-	public void increaseRound() {
+	public void increaseRound() throws RemoteException {
 		this.round = this.round + 1;
+		System.out.println(getNodeId() + ":Round increase, with value"+ getValue());
 	}
 
 	public int getfNumber() {
