@@ -1,5 +1,7 @@
 
 //Lab3
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -35,6 +37,7 @@ public class Node extends UnicastRemoteObject implements INode {
 	private int nodeId;
 	// Only for reference
 	private Registry registry;
+	private ArrayList<Registry> registries;
 	// nodes you haven't send a message to
 	private ArrayList<String> links;
 	// the message that send to you.
@@ -64,11 +67,15 @@ public class Node extends UnicastRemoteObject implements INode {
 	public boolean start = false;
 
 	private Clock clock;
+	
+	private ArrayList<String> remoteIps;
+	
+	private int IpIndex;
 
 	// Default constructor
 	public Node(int nodeId, int fNumber, int value, boolean traitor, int size, int port, boolean traitorRandomMessage,
-			boolean traitorDoNotSendMessage, int delay, int index, boolean synchronous)
-			throws RemoteException, AlreadyBoundException {
+			boolean traitorDoNotSendMessage, int delay, int index, boolean synchronous, ArrayList<String> remoteIps)
+			throws RemoteException, AlreadyBoundException, UnknownHostException {
 		this.port = port;
 		// decided =false at first
 		this.decided = false;
@@ -76,6 +83,14 @@ public class Node extends UnicastRemoteObject implements INode {
 		this.round = 1;
 		this.nodeId = nodeId;
 		this.registry = LocateRegistry.getRegistry(port);
+		this.remoteIps = remoteIps;
+		this.registries = new ArrayList<>();
+		for(String Ip:remoteIps){
+			this.registries.add(LocateRegistry.getRegistry(Ip,port));
+		}
+		this.IpIndex = this.registries.indexOf(InetAddress.getLocalHost());
+		this.registries.get(IpIndex).bind(Integer.toString(nodeId), this);
+		
 		this.registry.bind(Integer.toString(nodeId), this);
 		this.size = size;
 		this.fNumber = fNumber;
@@ -108,10 +123,10 @@ public class Node extends UnicastRemoteObject implements INode {
 		Byzantine byzan;
 		Thread thread;
 		// Change: if two machines
-		if (registry.list().length == this.size) {
+		if (getNodesNum() == this.size) {
 
 			if (this.getClock().getIndex() + 1 == this.getSize())
-				System.out.println(this.getNodeId() + ": I start" + registry.list().length);
+				System.out.println(this.getNodeId() + ": I start" + getNodesNum());
 
 			byzan = new Byzantine(this);
 			thread = new Thread(byzan);
@@ -122,8 +137,9 @@ public class Node extends UnicastRemoteObject implements INode {
 	// notify the rest about you
 	public void notifyOthers() throws AccessException, RemoteException, NotBoundException {
 		randomDelay();
-		String[] nodes;
-		nodes = this.registry.list();
+		String[] nodes = getallNodes();
+		
+
 		for (String nodeName : nodes) {
 			INode remoteNode = getRemoteNode(nodeName);
 			remoteNode.registerNode();
@@ -133,19 +149,22 @@ public class Node extends UnicastRemoteObject implements INode {
 			// System.out.println(this.getNodeId() + ": I register" +
 			// registry.list().length);
 		}
+		
+		
 
 	}
 
 	// get the remote Node based on the nodeId.
 	public INode getRemoteNode(String nodeStringId) throws AccessException, RemoteException, NotBoundException {
-		INode remoteNode = (INode) this.registry.lookup(nodeStringId);
+		int remoteIp = nodeStringId.charAt(0);
+		INode remoteNode = (INode) this.registries.get(remoteIp).lookup(nodeStringId.substring(1));
 		return remoteNode;
 	}
 
 	// BroadCast one Message to all neighbors
 	public void broadCast(Message m) throws AccessException, RemoteException, NotBoundException {
 		// If we have enough Nodes in our Links
-		if (getNodeId() == size)
+		if (getNodesNum() == size)
 			System.out.println(getNodeId() + ": I broadcast");
 		if (this.getLinks().size() >= size - 1) {
 			for (String node : this.getLinks()) {
@@ -212,7 +231,7 @@ public class Node extends UnicastRemoteObject implements INode {
 	public void broadcastClock() throws AccessException, RemoteException, NotBoundException {
 		int flag = 0;
 		for (String node : links) {
-			if (!node.equals(Integer.toString(this.getNodeId()))) {
+			if (!node.substring(1).equals(Integer.toString(this.getNodeId()))) {
 				getRemoteNode(node).receiveClock(this.clock);
 				flag++;
 			}
@@ -342,8 +361,8 @@ public class Node extends UnicastRemoteObject implements INode {
 		this.nodeId = id;
 	}
 
-	public Registry getRegistry() {
-		return this.registry;
+	public ArrayList<Registry> getRegistry() {
+		return this.registries;
 	}
 
 	public void setRound(int round) {
@@ -371,6 +390,25 @@ public class Node extends UnicastRemoteObject implements INode {
 
 	public boolean isTraitor() {
 		return !(this.traitor);
-
+	}
+	
+	public int getNodesNum() throws AccessException, RemoteException{
+		int num = 0;
+		for(int i=0; i<this.remoteIps.size();i++){
+			num+=this.registries.get(i).list().length;
+		}
+		return num;
+		
+	}
+	
+	public String[] getallNodes() throws AccessException, RemoteException{
+		String[] nodes = new String[getNodesNum()];
+		int nodeIndex=0;
+		for(int i=0;i<remoteIps.size();i++){
+			for(String nodeName:this.registries.get(i).list()){
+				nodes[nodeIndex] = Integer.toString(i)+nodeName;
+			}
+		}
+		return nodes;
 	}
 }

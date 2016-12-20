@@ -17,7 +17,7 @@ public class Byzantine implements Runnable {
 		try {
 			if (node.getClock().getIndex() + 1 == node.getSize())
 				System.out.println(node.getNodeId() + ": I start running");
-			String[] allNodes = node.getRegistry().list();
+			String[] allNodes = node.getallNodes();
 			// Complete graph.
 			for (String id : allNodes) {
 				// if (!id.equals(Integer.toString(node.getNodeId())))
