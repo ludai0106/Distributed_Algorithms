@@ -36,7 +36,6 @@ public class Node extends UnicastRemoteObject implements INode {
 	// the nodeId
 	private int nodeId;
 	// Only for reference
-	private Registry registry;
 	private ArrayList<Registry> registries;
 	// nodes you haven't send a message to
 	private ArrayList<String> links;
@@ -82,16 +81,18 @@ public class Node extends UnicastRemoteObject implements INode {
 		// round equals 1 at first
 		this.round = 1;
 		this.nodeId = nodeId;
-		this.registry = LocateRegistry.getRegistry(port);
 		this.remoteIps = remoteIps;
 		this.registries = new ArrayList<>();
 		for(String Ip:remoteIps){
 			this.registries.add(LocateRegistry.getRegistry(Ip,port));
 		}
-		this.IpIndex = this.registries.indexOf(InetAddress.getLocalHost());
+		String ipaddress = InetAddress.getLocalHost().toString().split("nl/")[1];
+		System.out.println(ipaddress);
+		this.IpIndex = this.remoteIps.indexOf(ipaddress);
+		System.out.println(IpIndex);
+
 		this.registries.get(IpIndex).bind(Integer.toString(nodeId), this);
 		
-		this.registry.bind(Integer.toString(nodeId), this);
 		this.size = size;
 		this.fNumber = fNumber;
 		this.value = value;

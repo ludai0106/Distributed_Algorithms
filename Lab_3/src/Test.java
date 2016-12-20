@@ -10,7 +10,7 @@ public class Test {
 
 	static boolean easyMode = false;
 	
-	static int networkSize = 15;
+	static int networkSize = 8;
 	static int rPort = 1099;
 	static int f = 3;
 	static boolean traitorRandomMessage = true;
@@ -30,15 +30,17 @@ public class Test {
 		}
 
 		if (args == null || args.length == 0) {
-		   remoteIps.add("123.11.22.123");
-		   remoteIps.add("123.11.22.123");
+		   
+		   remoteIps.add("145.94.211.226");
+		   remoteIps.add("145.94.183.254");
+		   System.setProperty("java.rmi.server.hostname","145.94.211.226");
 //		        int ip = new Random().nextInt(remoteIps.size());
 //		        System.out.println(remoteIps.get(ip));
 
 					
 			LocateRegistry.createRegistry(rPort);
 			
-			for (int i = 1; i <= networkSize; i++) {
+			for (int i = 1; i <= networkSize/2; i++) {
 				int nodeId = 1000 + i;
 				Node node;
 				if (i <= networkSize - f) {
