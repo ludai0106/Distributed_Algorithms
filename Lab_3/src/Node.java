@@ -411,6 +411,7 @@ public class Node extends UnicastRemoteObject implements INode {
 		for(int i=0;i<remoteIps.size();i++){
 			for(String nodeName:this.registries.get(i).list()){
 				nodes[nodeIndex] = Integer.toString(i)+nodeName;
+				nodeIndex++;
 			}
 		}
 		return nodes;
