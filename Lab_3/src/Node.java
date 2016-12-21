@@ -86,7 +86,8 @@ public class Node extends UnicastRemoteObject implements INode {
 		for(String Ip:remoteIps){
 			this.registries.add(LocateRegistry.getRegistry(Ip,port));
 		}
-		String ipaddress = InetAddress.getLocalHost().toString().split("nl/")[1];
+		System.out.println(InetAddress.getLocalHost().toString());
+		String ipaddress = InetAddress.getLocalHost().toString().split("/")[1];
 		System.out.println(ipaddress);
 		this.IpIndex = this.remoteIps.indexOf(ipaddress);
 		System.out.println(IpIndex);
@@ -158,8 +159,8 @@ public class Node extends UnicastRemoteObject implements INode {
 	// get the remote Node based on the nodeId.
 	public INode getRemoteNode(String nodeStringId) throws AccessException, RemoteException, NotBoundException {
 		int remoteIp = nodeStringId.charAt(0)-'0';
-		System.out.println(remoteIp);
-		System.out.println(nodeStringId.substring(1));
+		System.out.println("mchine id: " + remoteIp);
+		System.out.println("node id: " + nodeStringId.substring(1));
 		INode remoteNode = (INode) this.registries.get(remoteIp).lookup(nodeStringId.substring(1));
 
 		return remoteNode;

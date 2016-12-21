@@ -1,8 +1,11 @@
 import java.net.UnknownHostException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -18,6 +21,9 @@ public class Test {
 	static int delay = 0;
 	static boolean synchronous = false;
     static ArrayList<String> remoteIps = new ArrayList<>();
+    
+    private Test() {}
+
 
 	public static void main(String args[]) throws RemoteException, AlreadyBoundException, NotBoundException, UnknownHostException, InterruptedException {
 		// Configurations for easyMode
@@ -30,13 +36,29 @@ public class Test {
 		}
 
 		if (args == null || args.length == 0) {
+
 		   
 		   remoteIps.add("145.94.211.226");
-		   remoteIps.add("145.94.183.254");
-		  
-		    System.setProperty("java.rmi.server.hostname","145.94.211.226");
-		   // System.setProperty("java.rmi.server.hostname","145.94.183.254");
-		    Thread.sleep(5000);
+		   remoteIps.add("145.94.224.29");
+			  
+		    //System.setProperty("java.rmi.server.hostname","145.94.211.226");
+		   //System.setProperty("java.rmi.server.hostname","145.94.183.254");
+		    
+//
+//			try{
+//				Registry registry = LocateRegistry.getRegistry("145.94.211.226");
+//				Hello stub = (Hello) registry.lookup("Hello");
+//				String reponse = stub.sayHello();
+//				System.out.println("reponse: " + reponse);
+//			}
+//			catch (Exception e){
+//				System.err.println("Lam gao sou exception: " + e.toString());
+//				e.printStackTrace();
+//			}
+//		    
+		
+		    
+		    //Thread.sleep(5000);
 		    
 			LocateRegistry.createRegistry(rPort);
 			
