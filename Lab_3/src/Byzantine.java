@@ -15,8 +15,8 @@ public class Byzantine implements Runnable {
 	@Override
 	public void run() {
 		try {
-			if (node.getClock().getIndex() + 1 == node.getSize())
-				System.out.println(node.getNodeId() + ": I start running");
+
+			System.out.println(node.getNodeId() + ": I start running");
 			String[] allNodes = node.getallNodes();
 			// Complete graph.
 			for (String id : allNodes) {
@@ -28,22 +28,23 @@ public class Byzantine implements Runnable {
 			node.setStart(true);
 
 			// Change: if two machines
-			if (node.getClock().getIndex() + 1 != node.getSize()) {
-				while (!node.getRemoteNode(Integer.toString(node.getSize() + 1000)).getStart()) {
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+			// if (node.getClock().getIndex() + 1 != node.getSize()) {
+			while (!(node.getRemoteNode("1" + Integer.toString(node.getSize() / 2 + 1000)).getStart()
+					&& node.getRemoteNode("0" + Integer.toString(node.getSize() / 2 + 1000)).getStart())) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
+			// }
 
 			// do forever
 			while (true) {
 				// broadcast(N;r,v)
 
-				if (node.getClock().getIndex() + 1 == node.getSize())
-					System.out.println(node.getNodeId() + ": I enter while");
+				// if (node.getClock().getIndex() + 1 == node.getSize())
+				System.out.println(node.getNodeId() + ": I enter while");
 				int round = node.getRound();
 				int value = node.getValue();
 				int f = node.getfNumber();
@@ -109,13 +110,13 @@ public class Byzantine implements Runnable {
 				// r←r+1
 				synchronized (this) {
 					node.increaseRound();
-					if (node.getClock().getIndex() + 1 == node.getSize())
-						System.out.println(node.getNodeId() + ": I enter this");
+					// if (node.getClock().getIndex() + 1 == node.getSize())
+					System.out.println(node.getNodeId() + ": I enter this");
 					if (node.synchronous) {
 						// First tell others our time
 						node.broadcastClock();
 						// Wait till every one has their time
-						while (node.clockList.size() < node.getSize()-1) {
+						while (node.clockList.size() < node.getSize() - 1) {
 							try {
 								Thread.sleep(200);
 							} catch (InterruptedException e) {

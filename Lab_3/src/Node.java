@@ -55,11 +55,6 @@ public class Node extends UnicastRemoteObject implements INode {
 	// True, we may need to use Clock
 	boolean synchronous;
 
-	// // useless
-	// boolean receiveMessage = true;
-	// // useless
-	// boolean finished = false;
-
 	// delay value set by user
 	private int delay;
 
@@ -89,13 +84,12 @@ public class Node extends UnicastRemoteObject implements INode {
 		}
 
 		this.Ipaddress = InetAddress.getLocalHost().toString().split("nl/")[1];
-		//System.out.println(Ipaddress);
+
 		this.IpIndex = this.remoteIps.indexOf(this.Ipaddress);
 		this.nodeId = Integer.toString(IpIndex) + Integer.toString(nodeId);
-		//System.out.println("machine: "+ IpIndex);
-		this.registries.get(IpIndex).bind(this.nodeId, this);
-		System.out.println("Binding node: " + nodeId);
 
+		this.registries.get(IpIndex).bind(this.nodeId, this);
+		System.out.println("Binding node: " + this.nodeId);
 		
 		this.size = size;
 		this.fNumber = fNumber;
@@ -126,7 +120,7 @@ public class Node extends UnicastRemoteObject implements INode {
 	// So all threads starts at almost the same time
 	public void registerNode() throws AccessException, RemoteException, NotBoundException {
 		
-		System.out.println(this.nodeId + " enter regsiterNode ");
+		System.out.println(this.nodeId + " regsiter ");
 		Byzantine byzan;
 		Thread thread;
 		// Change: if two machines
@@ -139,13 +133,13 @@ public class Node extends UnicastRemoteObject implements INode {
 			thread = new Thread(byzan);
 			thread.start();
 		}
-		System.out.println(this.nodeId + " quit regsiterNode ");
+		//System.out.println(this.nodeId + " quit regsiterNode ");
 	}
 
 	// notify the rest about you
 	public void notifyOthers() throws AccessException, RemoteException, NotBoundException {
 		
-		System.out.println(this.nodeId + " enter notifyOthers ");
+		System.out.println(this.nodeId + "notifyOthers ");
 		randomDelay();
 		String[] nodes = getallNodes();
 		
@@ -159,26 +153,26 @@ public class Node extends UnicastRemoteObject implements INode {
 			// System.out.println(this.getNodeId() + ": I register" +
 			// registry.list().length);
 		}
-		System.out.println(this.nodeId + " quit notifyOthers ");
+		//System.out.println(this.nodeId + " quit notifyOthers ");
 		
 
 	}
 
 	// get the remote Node based on the nodeId.
 	public INode getRemoteNode(String nodeStringId) throws AccessException, RemoteException, NotBoundException {
-		System.out.println(this.nodeId + " enter getRemoteNode ");
+		//System.out.println(this.nodeId + " enter getRemoteNode ");
 		int remoteIp = nodeStringId.charAt(0)-'0';
 
 		//System.out.println("getting remote machine:" + remoteIp + " node name: " + nodeStringId);
 		INode remoteNode = (INode) this.registries.get(remoteIp).lookup(nodeStringId);
 
-		System.out.println(this.nodeId + " quit getRemoteNode ");
+		//System.out.println(this.nodeId + " quit getRemoteNode ");
 		return remoteNode;
 	}
 
 	// BroadCast one Message to all neighbors
 	public void broadCast(Message m) throws AccessException, RemoteException, NotBoundException {
-		System.out.println(this.nodeId + " enter broadCast ");
+		System.out.println(this.nodeId + " broadCast ");
 		// If we have enough Nodes in our Links
 		if (getNodesNum() == size)
 			System.out.println(getNodeId() + ": I broadcast");
@@ -209,7 +203,7 @@ public class Node extends UnicastRemoteObject implements INode {
 		} else {
 			System.out.println("Error: Not engouht Nodes in the Links");
 		}
-		System.out.println(this.nodeId + " quit broadCast ");
+		//System.out.println(this.nodeId + " quit broadCast ");
 	}
 
 	// Create a random number between [min, max]
