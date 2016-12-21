@@ -306,7 +306,7 @@ public class Node extends UnicastRemoteObject implements INode {
 	// Print out the decided value in certain round
 	public void decideAnounce() {
 		randomDelay();
-		System.out.format("node %d decided on %d in round %d\n", nodeId, value, round);
+		System.out.format("node %s decided on %d in round %d\n", nodeId, value, round);
 	}
 
 	// Add one message into the message List
