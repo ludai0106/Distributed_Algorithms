@@ -69,6 +69,8 @@ public class Node extends UnicastRemoteObject implements INode {
 	
 	private ArrayList<String> remoteIps;
 	
+	private String Ipaddress;
+	
 	private int IpIndex;
 
 	// Default constructor
@@ -86,12 +88,13 @@ public class Node extends UnicastRemoteObject implements INode {
 		for(String Ip:remoteIps){
 			this.registries.add(LocateRegistry.getRegistry(Ip,port));
 		}
-		String ipaddress = InetAddress.getLocalHost().toString().split("nl/")[1];
-		System.out.println(ipaddress);
-		this.IpIndex = this.remoteIps.indexOf(ipaddress);
-		System.out.println(IpIndex);
-
-		this.registries.get(IpIndex).bind(Integer.toString(nodeId), this);
+		this.Ipaddress = InetAddress.getLocalHost().toString().split("nl/")[1];
+		//System.out.println(ipaddress);
+		this.IpIndex = this.remoteIps.indexOf(this.Ipaddress);
+		//System.out.println("machine: "+ IpIndex);
+		String nodename = Integer.toString(IpIndex) + Integer.toString(nodeId);
+		this.registries.get(IpIndex).bind(nodename, this);
+		System.out.println("Binding node: " + nodename);
 		
 		this.size = size;
 		this.fNumber = fNumber;
@@ -158,9 +161,8 @@ public class Node extends UnicastRemoteObject implements INode {
 	// get the remote Node based on the nodeId.
 	public INode getRemoteNode(String nodeStringId) throws AccessException, RemoteException, NotBoundException {
 		int remoteIp = nodeStringId.charAt(0)-'0';
-		System.out.println(remoteIp);
-		System.out.println(nodeStringId.substring(1));
-		INode remoteNode = (INode) this.registries.get(remoteIp).lookup(nodeStringId.substring(1));
+		System.out.println("getting remote machine:" + remoteIp + " node name: " + nodeStringId);
+		INode remoteNode = (INode) this.registries.get(remoteIp).lookup(nodeStringId);
 
 		return remoteNode;
 	}
@@ -410,7 +412,7 @@ public class Node extends UnicastRemoteObject implements INode {
 		int nodeIndex=0;
 		for(int i=0;i<remoteIps.size();i++){
 			for(String nodeName:this.registries.get(i).list()){
-				nodes[nodeIndex] = Integer.toString(i)+nodeName;
+				nodes[nodeIndex] = nodeName;
 				nodeIndex++;
 			}
 		}
