@@ -1,6 +1,9 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 public interface Hello extends Remote {
-
+<<<<<<< HEAD
+	
+=======
+>>>>>>> origin/master
     String sayHello() throws RemoteException;
 }

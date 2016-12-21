@@ -22,8 +22,12 @@ public class Test {
 	static boolean synchronous = false;
     static ArrayList<String> remoteIps = new ArrayList<>();
     
+<<<<<<< HEAD
+   
+=======
+    private Test() {}
 
-
+>>>>>>> origin/master
 
 	public static void main(String args[]) throws RemoteException, AlreadyBoundException, NotBoundException, UnknownHostException, InterruptedException {
 		// Configurations for easyMode
@@ -39,13 +43,32 @@ public class Test {
 
 		   
 		   remoteIps.add("145.94.211.226");
-
+<<<<<<< HEAD
 		   remoteIps.add("145.94.183.254");
 		  
 		    //System.setProperty("java.rmi.server.hostname","145.94.211.226");
 		   //System.setProperty("java.rmi.server.hostname","145.94.183.254");
 
-
+=======
+		   remoteIps.add("145.94.224.29");
+			  
+		    //System.setProperty("java.rmi.server.hostname","145.94.211.226");
+		   //System.setProperty("java.rmi.server.hostname","145.94.183.254");
+		    
+//
+//			try{
+//				Registry registry = LocateRegistry.getRegistry("145.94.211.226");
+//				Hello stub = (Hello) registry.lookup("Hello");
+//				String reponse = stub.sayHello();
+//				System.out.println("reponse: " + reponse);
+//			}
+//			catch (Exception e){
+//				System.err.println("Lam gao sou exception: " + e.toString());
+//				e.printStackTrace();
+//			}
+//		    
+		
+>>>>>>> origin/master
 		    
 		    //Thread.sleep(5000);
 		    
