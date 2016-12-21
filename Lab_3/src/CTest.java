@@ -9,23 +9,24 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Test {
+public class CTest {
 
 	static boolean easyMode = false;
-	
-	static int networkSize = 10;
+
+	static int networkSize = 6;
 	static int rPort = 1099;
-	static int f = 2;
+	static int f = 1;
 	static boolean traitorRandomMessage = true;
 	static boolean traitorDoNotSendMessage = false;
 	static int delay = 0;
-	static boolean synchronous = false;
-    static ArrayList<String> remoteIps = new ArrayList<>();
-    
-    private Test() {}
+	static boolean synchronous = true;
+	static ArrayList<String> remoteIps = new ArrayList<>();
 
+	private CTest() {
+	}
 
-	public static void main(String args[]) throws RemoteException, AlreadyBoundException, NotBoundException, UnknownHostException, InterruptedException {
+	public static void main(String args[]) throws RemoteException, AlreadyBoundException, NotBoundException,
+			UnknownHostException, InterruptedException {
 		// Configurations for easyMode
 		if (easyMode) {
 			networkSize = 6;
@@ -35,38 +36,15 @@ public class Test {
 			delay = 0;
 		}
 
+		remoteIps.add("145.94.211.226");
+		remoteIps.add("145.94.183.254");
+
 		if (args == null || args.length == 0) {
 
-		   
-		   remoteIps.add("145.94.211.226");
-		   remoteIps.add("145.94.224.29");
-			  
-		    //System.setProperty("java.rmi.server.hostname","145.94.211.226");
-		   //System.setProperty("java.rmi.server.hostname","145.94.183.254");
-		    
-//
-//			try{
-//				Registry registry = LocateRegistry.getRegistry("145.94.211.226");
-//				Hello stub = (Hello) registry.lookup("Hello");
-//				String reponse = stub.sayHello();
-//				System.out.println("reponse: " + reponse);
-//			}
-//			catch (Exception e){
-//				System.err.println("Lam gao sou exception: " + e.toString());
-//				e.printStackTrace();
-//			}
-//		    
-		
-		    
-		    //Thread.sleep(5000);
-		    
-			LocateRegistry.createRegistry(rPort);
-			
-			
-			for (int i = 1; i <= networkSize/2; i++) {
-				int nodeId = 1000 + i;
+			for (int i = networkSize / 2 + 1; i <= networkSize; i++) {
+				int nodeId = 1000 + i - networkSize / 2;
 				Node node;
-				if (i <= networkSize/2 - f/2) {
+				if (i <= networkSize - f) {
 					node = new Node(nodeId, f, randomNumber(0, 1), true, networkSize, rPort, traitorRandomMessage,
 							traitorDoNotSendMessage, delay, i, synchronous, remoteIps);
 				} else {
@@ -77,6 +55,23 @@ public class Test {
 				System.out.println(node.getNodeId() + ":\tWaiting for the incoming messages...");
 			}
 
+		} else if (args.length == 4) {
+			int i = Integer.parseInt(args[0]);
+			int networkSize = Integer.parseInt(args[2]);
+			int f = Integer.parseInt(args[3]);
+			int nodeId = 1000 + i - networkSize / 2;
+
+			Node node;
+			if (args[1].equals("1")) {
+				node = new Node(nodeId, f, randomNumber(0, 1), true, networkSize, rPort, traitorRandomMessage,
+						traitorDoNotSendMessage, delay, i, synchronous, remoteIps);
+			} else {
+				// traitor
+				node = new Node(nodeId, f, 0, false, networkSize, rPort, traitorRandomMessage, traitorDoNotSendMessage,
+						delay, i, synchronous, remoteIps);
+			}
+			node.notifyOthers();
+			System.out.println(node.getNodeId() + ":\tWaiting for the incoming messages...");
 		}
 	}
 

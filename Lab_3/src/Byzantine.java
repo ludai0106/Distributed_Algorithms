@@ -15,8 +15,8 @@ public class Byzantine implements Runnable {
 	@Override
 	public void run() {
 		try {
-			if (node.getClock().getIndex() + 1 == node.getSize())
-				System.out.println(node.getNodeId() + ": I start running");
+
+			System.out.println(node.getNodeId() + ": I start running");
 			String[] allNodes = node.getallNodes();
 			// Complete graph.
 			for (String id : allNodes) {
@@ -28,33 +28,38 @@ public class Byzantine implements Runnable {
 			node.setStart(true);
 
 			// Change: if two machines
-			if (node.getClock().getIndex() + 1 != node.getSize()) {
-				while (!node.getRemoteNode(Integer.toString(node.getSize() + 1000)).getStart()) {
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+			// if (node.getClock().getIndex() + 1 != node.getSize()) {
+			while (!(node.getRemoteNode("1" + Integer.toString(node.getSize() / 2 + 1000)).getStart()
+					&& node.getRemoteNode("0" + Integer.toString(node.getSize() / 2 + 1000)).getStart())) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
+			// }
 
 			// do forever
 			while (true) {
 				// broadcast(N;r,v)
 
-				if (node.getClock().getIndex() + 1 == node.getSize())
-					System.out.println(node.getNodeId() + ": I enter while");
+				// if (node.getClock().getIndex() + 1 == node.getSize())
+				System.out.println(node.getNodeId() + ": I enter while");
 				int round = node.getRound();
 				int value = node.getValue();
 				int f = node.getfNumber();
 				Message mN = new Message(N, round, value);
+				System.out.println(node.getNodeId() + ": I broadCast N start");
 				node.broadCast(mN);
 
 				// System.out.println(node.getNodeId()+":Waiting for N...");
 
 				// await n−f messages of the form (N;r,*)
+				System.out.println(node.getNodeId() + ": I broadCast N finished");
+				System.out.println(node.getNodeId() + ": I awiting N start");
 				node.await(round, N);
-
+				System.out.println(node.getNodeId() + ": I awiting N finishing");
+				
 				// System.out.println(node.getNodeId()+":Waiting for N
 				// over...");
 
@@ -64,14 +69,18 @@ public class Byzantine implements Runnable {
 					// or 1
 
 					Message mP = new Message(P, round, node.getMaxMessageValue(N, round));
+					System.out.println(node.getNodeId() + ": I broadCast P start");
 					node.broadCast(mP);
+					System.out.println(node.getNodeId() + ": I broadCast P finishing");
 
 				} else {
 					// else broadcast(P;r,?), broadCast whatEvery, so we choose
 					// 1 magic number between 0 and 100
 
 					Message mP = new Message(P, round, randomNumber(0, 100));
+					System.out.println(node.getNodeId() + ": I broadCast P start");
 					node.broadCast(mP);
+					System.out.println(node.getNodeId() + ": I broadCast P finishing");
 				}
 
 				// if decided then STOP
@@ -80,9 +89,9 @@ public class Byzantine implements Runnable {
 				} else {
 					// else await n−f messages of the form (P,r,*)
 					// System.out.println(node.getNodeId()+":Waiting for P...");
-
+					System.out.println(node.getNodeId() + ": I awiting P start");
 					node.await(round, P);
-
+					System.out.println(node.getNodeId() + ": I awiting P finishing");
 					// System.out.println(node.getNodeId()+":Waiting for P
 					// over...");
 				}
@@ -109,13 +118,13 @@ public class Byzantine implements Runnable {
 				// r←r+1
 				synchronized (this) {
 					node.increaseRound();
-					if (node.getClock().getIndex() + 1 == node.getSize())
-						System.out.println(node.getNodeId() + ": I enter this");
+					// if (node.getClock().getIndex() + 1 == node.getSize())
+					System.out.println(node.getNodeId() + ": I enter this");
 					if (node.synchronous) {
 						// First tell others our time
 						node.broadcastClock();
 						// Wait till every one has their time
-						while (node.clockList.size() < node.getSize()-1) {
+						while (node.clockList.size() < node.getSize() - 1) {
 							try {
 								Thread.sleep(200);
 							} catch (InterruptedException e) {
@@ -138,6 +147,7 @@ public class Byzantine implements Runnable {
 
 							}
 						}
+						node.clockList.clear();
 						// Now it's time to break
 						while (!node.waitUntilSameRound()) {
 							Thread.sleep(200);

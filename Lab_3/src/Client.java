@@ -5,10 +5,13 @@ import java.rmi.registry.Registry;
 public class Client {
 	static int rPort = 1099;
 	private Client(){}
-	public static void main(String[] args) throws RemoteException{
+	public static void main(String[] args) throws RemoteException, InterruptedException{
 		LocateRegistry.createRegistry(rPort);
-		System.setProperty("java.rmi.server.hostname","145.94.224.29");
+		System.setProperty("java.rmi.server.hostname","145.94.183.254");
 		System.out.println("Lam gao sou ready!");
+		while(true){
+			Thread.sleep(1000);
+		}
 	}
 //		String remote = "145.94.211.226";
 //		try{
