@@ -173,6 +173,7 @@ public class Node extends UnicastRemoteObject implements INode {
 	public void broadCast(Message m) throws AccessException, RemoteException, NotBoundException {
 		System.out.println(this.nodeId + " broadCast ");
 		// If we have enough Nodes in our Links
+		int flag= 0;
 		if (this.getLinks().size() >= size ) {
 			for (String node : this.getLinks()) {
 				Random randomGenerator = new Random();
@@ -180,6 +181,7 @@ public class Node extends UnicastRemoteObject implements INode {
 				// if not a traitor
 				if (!this.isTraitor()) {
 					getRemoteNode(node).receiveMessage(m);
+					System.out.println("Here " + node);
 				} else if (!traitorDoNotSendMessage) {// if a traitor then may
 														// not send message,
 														// here we
@@ -195,7 +197,9 @@ public class Node extends UnicastRemoteObject implements INode {
 
 					}
 				}
-
+				flag++;
+				System.out.println(this.nodeId + "Send one " + flag);
+				
 			}
 		} else {
 			System.out.println("Error: Not engouht Nodes in the Links");
@@ -217,6 +221,7 @@ public class Node extends UnicastRemoteObject implements INode {
 				break;
 			} else {
 				Thread.sleep(200);
+				System.out.println(countMessage(type, round)+" "+(this.getSize() - this.getfNumber()));
 			}
 		}
 
