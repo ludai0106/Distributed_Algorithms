@@ -34,7 +34,7 @@ public class Node extends UnicastRemoteObject implements INode {
 	// level here represent how many nodes he captured
 	private int round;
 	// the nodeId
-	private int nodeId;
+	private String nodeId;
 	// Only for reference
 	private ArrayList<Registry> registries;
 	// nodes you haven't send a message to
@@ -82,7 +82,6 @@ public class Node extends UnicastRemoteObject implements INode {
 		this.decided = false;
 		// round equals 1 at first
 		this.round = 1;
-		this.nodeId = nodeId;
 		this.remoteIps = remoteIps;
 		this.registries = new ArrayList<>();
 		for(String Ip:remoteIps){
@@ -90,12 +89,12 @@ public class Node extends UnicastRemoteObject implements INode {
 		}
 
 		this.Ipaddress = InetAddress.getLocalHost().toString().split("nl/")[1];
-		//System.out.println(ipaddress);
+		//System.out.println(Ipaddress);
 		this.IpIndex = this.remoteIps.indexOf(this.Ipaddress);
+		this.nodeId = Integer.toString(IpIndex) + Integer.toString(nodeId);
 		//System.out.println("machine: "+ IpIndex);
-		String nodename = Integer.toString(IpIndex) + Integer.toString(nodeId);
-		this.registries.get(IpIndex).bind(nodename, this);
-		System.out.println("Binding node: " + nodename);
+		this.registries.get(IpIndex).bind(this.nodeId, this);
+		System.out.println("Binding node: " + nodeId);
 
 		
 		this.size = size;
@@ -130,7 +129,7 @@ public class Node extends UnicastRemoteObject implements INode {
 		Thread thread;
 		// Change: if two machines
 		if (getNodesNum() == this.size) {
-
+			
 			if (this.getClock().getIndex() + 1 == this.getSize())
 				System.out.println(this.getNodeId() + ": I start" + getNodesNum());
 
@@ -164,7 +163,7 @@ public class Node extends UnicastRemoteObject implements INode {
 	public INode getRemoteNode(String nodeStringId) throws AccessException, RemoteException, NotBoundException {
 		int remoteIp = nodeStringId.charAt(0)-'0';
 
-		System.out.println("getting remote machine:" + remoteIp + " node name: " + nodeStringId);
+		//System.out.println("getting remote machine:" + remoteIp + " node name: " + nodeStringId);
 		INode remoteNode = (INode) this.registries.get(remoteIp).lookup(nodeStringId);
 
 
@@ -176,7 +175,7 @@ public class Node extends UnicastRemoteObject implements INode {
 		// If we have enough Nodes in our Links
 		if (getNodesNum() == size)
 			System.out.println(getNodeId() + ": I broadcast");
-		if (this.getLinks().size() >= size - 1) {
+		if (this.getLinks().size() >= size ) {
 			for (String node : this.getLinks()) {
 				Random randomGenerator = new Random();
 				randomDelay();
@@ -241,7 +240,7 @@ public class Node extends UnicastRemoteObject implements INode {
 	public void broadcastClock() throws AccessException, RemoteException, NotBoundException {
 		int flag = 0;
 		for (String node : links) {
-			if (!node.substring(1).equals(Integer.toString(this.getNodeId()))) {
+			if (!node.equals(this.getNodeId())) {
 				getRemoteNode(node).receiveClock(this.clock);
 				flag++;
 			}
@@ -363,11 +362,11 @@ public class Node extends UnicastRemoteObject implements INode {
 		setDecided(true);
 	}
 
-	public int getNodeId() throws RemoteException {
+	public String getNodeId() throws RemoteException {
 		return this.nodeId;
 	}
 
-	public void setNodeId(int id) {
+	public void setNodeId(String id) {
 		this.nodeId = id;
 	}
 
