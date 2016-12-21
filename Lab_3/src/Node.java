@@ -139,15 +139,14 @@ public class Node extends UnicastRemoteObject implements INode {
 	// notify the rest about you
 	public void notifyOthers() throws AccessException, RemoteException, NotBoundException {
 		
-		System.out.println(this.nodeId + "notifyOthers ");
+		System.out.println(this.nodeId + " notifyOthers ");
 		randomDelay();
 		String[] nodes = getallNodes();
 		
-
 		for (String nodeName : nodes) {
 			INode remoteNode = getRemoteNode(nodeName);
 			remoteNode.registerNode();
-			System.out.println(this.getNodeId() + ":\tNotified node: " + nodeName);
+			//System.out.println(this.getNodeId() + ":\t Notified node: " + nodeName);
 
 			// if (this.getClock().getIndex() == this.getSize())
 			// System.out.println(this.getNodeId() + ": I register" +
@@ -174,8 +173,6 @@ public class Node extends UnicastRemoteObject implements INode {
 	public void broadCast(Message m) throws AccessException, RemoteException, NotBoundException {
 		System.out.println(this.nodeId + " broadCast ");
 		// If we have enough Nodes in our Links
-		if (getNodesNum() == size)
-			System.out.println(getNodeId() + ": I broadcast");
 		if (this.getLinks().size() >= size ) {
 			for (String node : this.getLinks()) {
 				Random randomGenerator = new Random();
@@ -227,7 +224,7 @@ public class Node extends UnicastRemoteObject implements INode {
 
 	// TODO:
 	public boolean waitUntilSameRound() throws AccessException, RemoteException, NotBoundException {
-		System.out.println(this.nodeId + " enter waitUntilSameRound ");
+//		System.out.println(this.nodeId + " enter waitUntilSameRound ");
 		// Now we need to make sure we are slower than others
 		boolean result = true;
 		for (String node : links) {
@@ -235,13 +232,13 @@ public class Node extends UnicastRemoteObject implements INode {
 			if (!result)
 				return false;
 		}
-		System.out.println(this.nodeId + " quit waitUntilSameRound ");
+//		System.out.println(this.nodeId + " quit waitUntilSameRound ");
 		return result;
 
 	}
 
 	public void broadcastClock() throws AccessException, RemoteException, NotBoundException {
-		System.out.println(this.nodeId + " enter broadcastClock ");
+//		System.out.println(this.nodeId + " enter broadcastClock ");
 		int flag = 0;
 		for (String node : links) {
 			if (!node.equals(this.getNodeId())) {
@@ -257,7 +254,7 @@ public class Node extends UnicastRemoteObject implements INode {
 
 		}
 		System.out.println(this.getNodeId() + ": already sent" + flag);
-		System.out.println(this.nodeId + " quit broadcastClock ");
+//		System.out.println(this.nodeId + " quit broadcastClock ");
 	}
 
 	public synchronized void receiveClock(Clock c) throws RemoteException {
