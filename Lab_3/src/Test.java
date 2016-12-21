@@ -1,8 +1,11 @@
 import java.net.UnknownHostException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -18,6 +21,8 @@ public class Test {
 	static int delay = 0;
 	static boolean synchronous = false;
     static ArrayList<String> remoteIps = new ArrayList<>();
+    
+   
 
 	public static void main(String args[]) throws RemoteException, AlreadyBoundException, NotBoundException, UnknownHostException, InterruptedException {
 		// Configurations for easyMode
@@ -34,13 +39,14 @@ public class Test {
 		   remoteIps.add("145.94.211.226");
 		   remoteIps.add("145.94.183.254");
 		  
-		    System.setProperty("java.rmi.server.hostname","145.94.211.226");
-		   // System.setProperty("java.rmi.server.hostname","145.94.183.254");
-		    Thread.sleep(5000);
+		    //System.setProperty("java.rmi.server.hostname","145.94.211.226");
+		   //System.setProperty("java.rmi.server.hostname","145.94.183.254");
+
 		    
-			LocateRegistry.createRegistry(rPort);
-			
-			
+		    //Thread.sleep(5000);
+		    
+			//LocateRegistry.createRegistry(rPort);
+		    	
 			for (int i = 1; i <= networkSize/2; i++) {
 				int nodeId = 1000 + i;
 				Node node;
