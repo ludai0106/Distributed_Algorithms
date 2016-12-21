@@ -13,13 +13,13 @@ public class Test {
 
 	static boolean easyMode = false;
 	
-	static int networkSize = 6;
+	static int networkSize = 12;
 	static int rPort = 1099;
-	static int f = 1;
+	static int f = 2;
 	static boolean traitorRandomMessage = true;
 	static boolean traitorDoNotSendMessage = false;
 	static int delay = 0;
-	static boolean synchronous = false;
+	static boolean synchronous = true;
     static ArrayList<String> remoteIps = new ArrayList<>();
     
 
@@ -34,7 +34,9 @@ public class Test {
 			traitorDoNotSendMessage = false;
 			delay = 0;
 		}
-
+		
+		
+		
 		if (args == null || args.length == 0) {
 
 		   
@@ -60,6 +62,22 @@ public class Test {
 				System.out.println(node.getNodeId() + ":\tWaiting for the incoming messages...");
 			}
 
+		}
+		else if(args.length == 3){
+			int nodeId = 1000+ Integer.parseInt(args[0]);
+			int networkSize =  Integer.parseInt(args[2]);
+			Node node;
+			if(args[1]=="1"){
+				 node = new Node(nodeId, f, randomNumber(0, 1), true, networkSize, rPort, traitorRandomMessage,
+						traitorDoNotSendMessage, delay, Integer.parseInt(args[0]), synchronous, remoteIps);
+			}
+			else{
+				//traitor
+				node = new Node(nodeId, f, 0, false, networkSize, rPort, traitorRandomMessage,
+						traitorDoNotSendMessage, delay, Integer.parseInt(args[0]), synchronous, remoteIps);
+			}
+			node.notifyOthers();
+			System.out.println(node.getNodeId() + ":\tWaiting for the incoming messages...");
 		}
 	}
 
