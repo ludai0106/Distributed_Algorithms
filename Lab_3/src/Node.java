@@ -1,5 +1,8 @@
 
 //Lab3
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -145,8 +148,8 @@ public class Node extends UnicastRemoteObject implements INode {
 	// BroadCast one Message to all neighbors
 	public void broadCast(Message m) throws AccessException, RemoteException, NotBoundException {
 		// If we have enough Nodes in our Links
-		if (getNodeId() == size)
-			System.out.println(getNodeId() + ": I broadcast");
+		// if (getNodeId() == size)
+		// System.out.println(getNodeId() + ": I broadcast");
 		if (this.getLinks().size() >= size - 1) {
 			for (String node : this.getLinks()) {
 				Random randomGenerator = new Random();
@@ -373,4 +376,52 @@ public class Node extends UnicastRemoteObject implements INode {
 		return !(this.traitor);
 
 	}
+
+	public static String writeCSV(String publicDNS, String publicIP, String privateIP, String instanceId,
+			String csvFileName, boolean addMoreLine) throws IOException {
+		String Path = Paths.get(".").toAbsolutePath().normalize().toString();
+		String csv = Path + "/" + csvFileName + ".csv";
+
+		FileWriter pw = new FileWriter(csv, addMoreLine);
+
+		// DNS
+		pw.append(publicDNS);
+		pw.append(",");
+		// Public IP
+		pw.append(publicIP);
+		pw.append(",");
+		// Private IP
+		pw.append(privateIP);
+		pw.append(",");
+		pw.append(instanceId);
+
+		pw.append("\n");
+		pw.flush();
+		pw.close();
+
+		return csv;
+
+	}
+
+	public static String writeCSV(String value, String csvFileName, boolean addMoreLine, boolean last)
+			throws IOException {
+		String Path = Paths.get(".").toAbsolutePath().normalize().toString();
+		String csv = Path + "/" + csvFileName + ".csv";
+
+		FileWriter pw = new FileWriter(csv, addMoreLine);
+
+		pw.append(value);
+		// If not last , if last then we
+		if (!last) {
+			pw.append(",");
+		} else {
+			pw.append("\n");
+		}
+		pw.flush();
+		pw.close();
+
+		return csv;
+
+	}
+
 }

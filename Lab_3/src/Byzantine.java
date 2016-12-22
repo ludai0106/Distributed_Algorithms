@@ -1,4 +1,12 @@
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.file.Paths;
 import java.util.Random;
 
 public class Byzantine implements Runnable {
@@ -15,9 +23,10 @@ public class Byzantine implements Runnable {
 	@Override
 	public void run() {
 		try {
-			if (node.getClock().getIndex() + 1 == node.getSize())
-				System.out.println(node.getNodeId() + ": I start running");
+			// if (node.getClock().getIndex() + 1 == node.getSize())
+			System.out.println(node.getNodeId() + ": I start running");
 			String[] allNodes = node.getRegistry().list();
+			int pureId = node.getClock().getIndex() + 1;
 			// Complete graph.
 			for (String id : allNodes) {
 				// if (!id.equals(Integer.toString(node.getNodeId())))
@@ -42,12 +51,12 @@ public class Byzantine implements Runnable {
 			while (true) {
 				// broadcast(N;r,v)
 
-				if (node.getClock().getIndex() + 1 == node.getSize())
-					System.out.println(node.getNodeId() + ": I enter while");
+				// if (node.getClock().getIndex() + 1 == node.getSize())
+				// System.out.println(node.getNodeId() + ": I enter while");
 				int round = node.getRound();
 				int value = node.getValue();
 				int f = node.getfNumber();
-				Message mN = new Message(N, round, value);
+				Message mN = new Message(N, round, value, pureId);
 				node.broadCast(mN);
 
 				// System.out.println(node.getNodeId()+":Waiting for N...");
@@ -63,15 +72,19 @@ public class Byzantine implements Runnable {
 					// broadcast(P;r,w), w has to be the larger value, either 0
 					// or 1
 
-					Message mP = new Message(P, round, node.getMaxMessageValue(N, round));
+					Message mP = new Message(P, round, node.getMaxMessageValue(N, round), pureId);
 					node.broadCast(mP);
-
 				} else {
 					// else broadcast(P;r,?), broadCast whatEvery, so we choose
 					// 1 magic number between 0 and 100
 
-					Message mP = new Message(P, round, randomNumber(0, 100));
+					Message mP = new Message(P, round, randomNumber(0, 100), pureId);
 					node.broadCast(mP);
+					if (countRow("result") == node.getSize() - 1 || countRow("result") > node.getSize())
+						writeCSV("Id" +" "+ pureId + " " + round + " " + Integer.toString(mP.getW()), "result", true, true);
+					else
+						writeCSV("Id" +" "+ pureId + " " + round + " " + Integer.toString(mP.getW()), "result", true,
+								false);
 				}
 
 				// if decided then STOP
@@ -109,13 +122,13 @@ public class Byzantine implements Runnable {
 				// r←r+1
 				synchronized (this) {
 					node.increaseRound();
-					if (node.getClock().getIndex() + 1 == node.getSize())
-						System.out.println(node.getNodeId() + ": I enter this");
+					// if (node.getClock().getIndex() + 1 == node.getSize())
+					// System.out.println(node.getNodeId() + ": I enter this");
 					if (node.synchronous) {
 						// First tell others our time
 						node.broadcastClock();
 						// Wait till every one has their time
-						while (node.clockList.size() < node.getSize()-1) {
+						while (node.clockList.size() < node.getSize() - 1) {
 							try {
 								Thread.sleep(200);
 							} catch (InterruptedException e) {
@@ -159,6 +172,54 @@ public class Byzantine implements Runnable {
 	public static int randomNumber(int min, int max) {
 		Random r = new Random();
 		return r.nextInt(max + 1 - min) + min;
+	}
+
+	public static String writeCSV(String value, String csvFileName, boolean addMoreLine, boolean last)
+			throws IOException {
+		String Path = Paths.get(".").toAbsolutePath().normalize().toString();
+		String csv = Path + "/" + csvFileName + ".csv";
+
+		FileWriter pw = new FileWriter(csv, addMoreLine);
+
+		pw.append(value);
+		// If not last , if last then we
+		if (!last) {
+			pw.append(",");
+		} else {
+			pw.append("\n");
+		}
+		pw.flush();
+		pw.close();
+
+		return csv;
+
+	}
+
+	public static int countRow(String name) throws FileNotFoundException {
+		String Path = Paths.get(".").toAbsolutePath().normalize().toString();
+		String csv = Path + "/" + name + ".csv";
+		BufferedReader reader = new BufferedReader(new FileReader(csv));
+		String line = "";
+		String[] Shit = null;
+		int count = 0;
+
+		try {
+			while ((line = reader.readLine()) != null) {
+				Shit = line.trim().split(",");
+				// if you want to check either it contains some name
+				// index 0 is first name, index 1 is last name, index 2 is ID
+				// System.out.println(Shit[0] + "," + Shit[1] + "," + Shit[2] +
+				// "," + Shit[3]);
+				count = Shit.length;
+				// line = reader.readLine();
+
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return count;
 	}
 
 }

@@ -1,0 +1,81 @@
+ 
+networkSize,f,delay,traitorRandomMessage,traitorDoNotSendMessage,synchronous
+15,3,0,true,false,true
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+true,true,true,true,true,true,true,true,true,true,true,true,false,false,false
+1,1,1,1,1,0,0,0,1,1,1,1,0,0,0
+Id 13 1 60,Id 14 1 38,Id 4 1 20,Id 3 1 50,Id 5 1 22,Id 6 1 87,Id 2 1 89,Id 8 1 54,Id 7 1 41,Id 15 1 71,Id 10 1 66,Id 12 1 75,Id 11 1 42,Id 9 1 92,Id 1 1 24
+Id 4 2 18,Id 3 2 10,Id 8 2 39,Id 2 2 27,Id 5 2 69,Id 12 2 83,Id 7 2 94,Id 14 2 54,Id 13 2 69,Id 1 2 80,Id 15 2 95,Id 6 2 96,Id 9 2 5,Id 10 2 49,Id 11 2 70
+Id 1 3 59,Id 15 3 54,Id 6 3 74,Id 11 3 8,Id 4 3 25,Id 3 3 10,Id 10 3 71,Id 9 3 54,Id 8 3 90,Id 2 3 18,Id 12 3 89,Id 5 3 68,Id 13 3 37,Id 14 3 71,Id 7 3 69
+Id 4 4 31,Id 7 4 37,Id 3 4 50,Id 8 4 13,Id 6 4 68,Id 2 4 29,Id 5 4 100,Id 1 4 68,Id 12 4 8,Id 9 4 97,Id 10 4 95,Id 13 4 70,Id 11 4 96,Id 15 4 46,Id 14 4 35
+Id 9 5 0,Id 13 5 83,Id 10 5 4,Id 15 5 96,Id 3 5 99,Id 8 5 7,Id 6 5 61,Id 4 5 53,Id 11 5 19,Id 7 5 91,Id 2 5 20,Id 5 5 73,Id 1 5 59,Id 12 5 76,Id 14 5 79
+Id 2 6 61,Id 5 6 56,Id 8 6 38,Id 1 6 16,Id 7 6 87,Id 6 6 51,Id 4 6 12,Id 3 6 51,Id 12 6 46,Id 13 6 44,Id 9 6 88,Id 14 6 23,Id 15 6 72,Id 10 6 72,Id 11 6 3
+Id 9 7 41,Id 14 7 17,Id 15 7 87,Id 11 7 9,Id 1 7 30,Id 8 7 56,Id 2 7 11,Id 4 7 0,Id 7 7 16,Id 3 7 13,Id 5 7 26,Id 6 7 63,Id 13 7 11,Id 12 7 23,Id 10 7 87
+Id 2 8 73,Id 3 8 51,Id 6 8 89,Id 4 8 47,Id 5 8 75,Id 12 8 69,Id 15 8 33,Id 10 8 11,Id 11 8 5,Id 1 8 27,Id 8 8 79,Id 13 8 65,Id 9 8 28,Id 7 8 10,Id 14 8 44
+Id 11 9 33,Id 8 9 27,Id 13 9 80,Id 7 9 24,Id 9 9 27,Id 14 9 36,Id 4 9 49,Id 12 9 8,Id 2 9 30,Id 3 9 20,Id 6 9 27,Id 5 9 94,Id 15 9 56,Id 10 9 78,Id 1 9 58
+Id 4 10 35,Id 3 10 60,Id 2 10 4,Id 10 10 92,Id 15 10 34,Id 11 10 37,Id 1 10 48,Id 8 10 19,Id 13 10 4,Id 9 10 28,Id 7 10 29,Id 14 10 62,Id 12 10 78,Id 5 10 32,Id 6 10 42
+Id 9 11 39,Id 7 11 19,Id 6 11 26,Id 5 11 48,Id 3 11 83,Id 12 11 86,Id 15 11 97,Id 10 11 87,Id 2 11 54,Id 11 11 83,Id 1 11 70,Id 8 11 98,Id 13 11 23,Id 14 11 27,Id 4 11 84
+Id 13 12 89,Id 9 12 8,Id 7 12 70,Id 14 12 1,Id 3 12 94,Id 12 12 20,Id 5 12 55,Id 4 12 21,Id 15 12 43,Id 6 12 58,Id 10 12 74,Id 2 12 78,Id 11 12 38,Id 1 12 57,Id 8 12 52
+Id 5 13 98,Id 4 13 14,Id 6 13 59,Id 12 13 100,Id 3 13 67,Id 10 13 76,Id 11 13 62,Id 1 13 31,Id 8 13 13,Id 13 13 93,Id 9 13 88,Id 7 13 31,Id 14 13 1,Id 15 13 80,Id 2 13 10
+Id 8 14 10,Id 13 14 86,Id 7 14 66,Id 9 14 0,Id 14 14 86,Id 15 14 60,Id 3 14 7,Id 10 14 34,Id 6 14 20,Id 4 14 16,Id 5 14 26,Id 12 14 94,Id 2 14 94,Id 1 14 100,Id 11 14 96
+Id 9 15 80,Id 14 15 57,Id 10 15 98,Id 11 15 79,Id 6 15 55,Id 12 15 49,Id 3 15 60,Id 4 15 53,Id 2 15 70,Id 5 15 25,Id 1 15 97,Id 13 15 10,Id 8 15 13,Id 7 15 42,Id 15 15 58
+Id 4 16 3,Id 2 16 84,Id 5 16 2,Id 11 16 9,Id 3 16 19,Id 1 16 93,Id 8 16 20,Id 13 16 90,Id 9 16 98,Id 7 16 53,Id 15 16 43,Id 14 16 69,Id 10 16 0,Id 6 16 49,Id 12 16 83
+Id 8 17 100,Id 14 17 15,Id 11 17 96,Id 12 17 71,Id 1 17 17,Id 2 17 96,Id 4 17 29,Id 5 17 80,Id 3 17 3,Id 10 17 25,Id 6 17 35,Id 13 17 79,Id 9 17 73,Id 7 17 71,Id 15 17 6
+Id 13 18 74,Id 2 18 19,Id 12 18 77,Id 5 18 49,Id 4 18 99,Id 6 18 16,Id 11 18 52,Id 10 18 26,Id 3 18 92,Id 1 18 95,Id 9 18 47,Id 8 18 44,Id 7 18 14,Id 15 18 34,Id 14 18 91
+Id 12 19 14,Id 11 19 18,Id 6 19 7,Id 10 19 41,Id 5 19 66,Id 3 19 34,Id 4 19 58,Id 15 19 64,Id 14 19 93,Id 13 19 72,Id 2 19 30,Id 9 19 1,Id 7 19 91,Id 8 19 62,Id 1 19 53
+Id 7 20 26,Id 11 20 66,Id 1 20 26,Id 10 20 33,Id 5 20 37,Id 3 20 74,Id 4 20 56,Id 6 20 16,Id 12 20 66,Id 14 20 89,Id 15 20 22,Id 13 20 89,Id 8 20 29,Id 2 20 40,Id 9 20 89
+Id 15 21 63,Id 2 21 45,Id 8 21 42,Id 13 21 8,Id 7 21 58,Id 1 21 79,Id 3 21 14,Id 12 21 2,Id 11 21 93,Id 5 21 55,Id 10 21 46,Id 4 21 18,Id 6 21 60,Id 14 21 47,Id 9 21 4
+Id 1 22 19,Id 12 22 77,Id 4 22 13,Id 3 22 72,Id 10 22 50,Id 5 22 31,Id 14 22 41,Id 15 22 13,Id 13 22 18,Id 8 22 1,Id 2 22 35,Id 9 22 90,Id 7 22 74,Id 11 22 90,Id 6 22 0
+Id 2 23 75,Id 8 23 42,Id 7 23 92,Id 11 23 23,Id 6 23 48,Id 12 23 100,Id 1 23 42,Id 14 23 32,Id 15 23 48,Id 5 23 3,Id 3 23 81,Id 10 23 19,Id 13 23 20,Id 9 23 13,Id 4 23 21
+Id 4 24 71,Id 6 24 50,Id 12 24 9,Id 11 24 64,Id 1 24 73,Id 14 24 24,Id 15 24 45,Id 5 24 59,Id 3 24 22,Id 10 24 6,Id 13 24 4,Id 2 24 76,Id 9 24 71,Id 7 24 67,Id 8 24 76
+ 
+networkSize,f,delay,traitorRandomMessage,traitorDoNotSendMessage,synchronous
+15,3,0,true,false,false
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+true,true,true,true,true,true,true,true,true,true,true,true,false,false,false
+1,1,1,1,1,0,0,0,1,1,1,1,0,0,0
+Id 2 1 87,Id 3 1 45,Id 4 1 93,Id 5 1 75,Id 6 1 47,Id 7 1 24,Id 9 1 86,Id 12 1 98,Id 10 1 55,Id 8 1 26,Id 14 1 24,Id 13 1 23,Id 15 1 84,Id 1 1 83
+Id 5 2 18,Id 6 2 5,Id 7 2 91,Id 9 2 95,Id 10 2 40,Id 12 2 41,Id 8 2 8,Id 14 2 18,Id 13 2 23,Id 15 2 24,Id 1 2 73,Id 2 2 86,Id 4 2 48,Id 3 2 12,Id 11 2 3
+Id 10 3 44,Id 1 3 10,Id 2 3 61,Id 3 3 27,Id 4 3 74,Id 11 3 92,Id 5 3 27,Id 6 3 19,Id 7 3 49,Id 9 3 97,Id 13 3 16,Id 15 3 84,Id 14 3 38,Id 8 3 27,Id 12 3 27
+Id 6 4 68,Id 7 4 9,Id 10 4 12,Id 14 4 61,Id 15 4 18,Id 9 4 94,Id 13 4 93,Id 12 4 81,Id 8 4 56,Id 1 4 51,Id 2 4 10,Id 4 4 32,Id 3 4 60,Id 11 4 12,Id 5 4 63
+Id 7 5 94,Id 9 5 81,Id 12 5 21,Id 8 5 32,Id 1 5 27,Id 2 5 89,Id 3 5 31,Id 4 5 18,Id 11 5 94,Id 5 5 79,Id 6 5 62,Id 15 5 99,Id 14 5 73,Id 13 5 13,Id 10 5 22
+Id 3 6 27,Id 11 6 33,Id 4 6 83,Id 5 6 78,Id 6 6 65,Id 15 6 21,Id 13 6 98,Id 14 6 62,Id 10 6 6,Id 7 6 70,Id 12 6 5,Id 9 6 53,Id 8 6 50,Id 1 6 86,Id 2 6 56
+Id 10 7 15,Id 12 7 97,Id 7 7 26,Id 1 7 20,Id 9 7 85,Id 8 7 11,Id 2 7 58,Id 4 7 78,Id 11 7 18,Id 3 7 63,Id 5 7 47,Id 15 7 79,Id 6 7 100,Id 13 7 20,Id 14 7 79
+Id 3 8 34,Id 11 8 65,Id 4 8 2
+
+ 
+networkSize,f,delay,traitorRandomMessage,traitorDoNotSendMessage,synchronous
+15,3,0,true,false,false
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+true,true,true,true,true,true,true,true,true,true,true,true,false,false,false
+1,1,1,1,1,0,0,0,1,1,1,1,0,0,0
+Id 2 1 6,Id 3 1 24,Id 13 1 56,Id 4 1 95,Id 5 1 92,Id 9 1 40,Id 8 1 61,Id 7 1 33,Id 15 1 88,Id 12 1 45,Id 6 1 50,Id 11 1 63,Id 10 1 26,Id 1 1 100,Id 14 1 74
+Id 9 2 95,Id 7 2 62,Id 8 2 66,Id 12 2 76,Id 6 2 75,Id 10 2 47,Id 11 2 72,Id 14 2 5,Id 2 2 22,Id 3 2 33,Id 13 2 5,Id 4 2 77,Id 15 2 29,Id 5 2 46,Id 1 2 62
+Id 2 3 39,Id 3 3 71,Id 13 3 72,Id 15 3 34,Id 4 3 82,Id 5 3 18,Id 1 3 19,Id 9 3 66,Id 7 3 30,Id 8 3 20,Id 14 3 69,Id 12 3 71,Id 10 3 91,Id 11 3 15,Id 6 3 31
+Id 9 4 58,Id 7 4 74,Id 8 4 23,Id 14 4 51,Id 6 4 10,Id 11 4 48,Id 10 4 95,Id 12 4 1,Id 13 4 13,Id 2 4 46,Id 3 4 18,Id 15 4 47,Id 4 4 19,Id 5 4 70,Id 1 4 34
+Id 2 5 47,Id 3 5 1,Id 15 5 50,Id 4 5 43,Id 5 5 38,Id 1 5 14,Id 14 5 41,Id 9 5 12,Id 7 5 42,Id 8 5 44,Id 12 5 87,Id 6 5 11,Id 10 5 51,Id 11 5 22,Id 13 5 17
+networkSize,f,delay,traitorRandomMessage,traitorDoNotSendMessage,synchronous
+15,3,0,true,false,true
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+true,true,true,true,true,true,true,true,true,true,true,true,false,false,false
+1,1,1,1,1,0,0,0,1,1,1,1,0,0,0
+Id 2 1 73,Id 3 1 53,Id 13 1 15,Id 4 1 20,Id 5 1 77,Id 6 1 23,Id 7 1 71,Id 8 1 47,Id 9 1 76,Id 1 1 49,Id 10 1 9,Id 12 1 40,Id 11 1 96,Id 15 1 58,Id 14 1 8
+Id 15 2 0,Id 6 2 6,Id 14 2 96,Id 11 2 42,Id 10 2 70,Id 2 2 17,Id 3 2 87,Id 13 2 6,Id 4 2 19,Id 1 2 30,Id 7 2 67,Id 8 2 53,Id 9 2 64,Id 12 2 54,Id 5 2 85
+Id 10 3 41,Id 12 3 1,Id 6 3 92,Id 2 3 1,Id 3 3 61,Id 13 3 59,Id 4 3 38,Id 5 3 8,Id 1 3 73,Id 14 3 54,Id 9 3 22,Id 8 3 37,Id 7 3 46,Id 15 3 25,Id 11 3 50
+Id 9 4 45,Id 7 4 10,Id 15 4 52,Id 10 4 15,Id 8 4 75,Id 12 4 11,Id 6 4 41,Id 3 4 2,Id 11 4 48,Id 2 4 34,Id 13 4 13,Id 5 4 18,Id 4 4 47,Id 1 4 55,Id 14 4 16
+Id 6 5 72,Id 5 5 65,Id 3 5 43,Id 4 5 72,Id 12 5 84,Id 11 5 13,Id 1 5 4,Id 14 5 62,Id 7 5 46,Id 9 5 96,Id 15 5 88,Id 10 5 92,Id 8 5 43,Id 2 5 17,Id 13 5 62
+Id 9 6 5,Id 7 6 62,Id 15 6 42,Id 8 6 29,Id 10 6 64,Id 2 6 24,Id 13 6 66,Id 6 6 49,Id 5 6 43,Id 4 6 75,Id 12 6 87,Id 3 6 50,Id 11 6 73,Id 1 6 96,Id 14 6 97
+Id 5 7 0,Id 12 7 87,Id 3 7 84,Id 4 7 89,Id 11 7 28,Id 1 7 17,Id 14 7 54,Id 7 7 55,Id 9 7 85,Id 15 7 92,Id 2 7 28,Id 10 7 28,Id 8 7 43,Id 13 7 71,Id 6 7 34
+Id 9 8 85,Id 2 8 37,Id 8 8 45,Id 10 8 44,Id 13 8 58,Id 5 8 22,Id 6 8 26,Id 3 8 28,Id 11 8 62,Id 4 8 99,Id 12 8 0,Id 1 8 30,Id 14 8 91,Id 7 8 89,Id 15 8 62
+Id 3 9 7,Id 11 9 79,Id 12 9 22,Id 14 9 84,Id 7 9 53,Id 9 9 41,Id 15 9 29,Id 8 9 92,Id 10 9 90,Id 2 9 57,Id 13 9 96,Id 5 9 40,Id 6 9 65,Id 4 9 43,Id 1 9 82
+Id 6 10 23,Id 14 10 4,Id 3 10 84,Id 12 10 52,Id 4 10 83,Id 11 10 81,Id 1 10 45,Id 15 10 28,Id 9 10 1,Id 7 10 53,Id 10 10 45,Id 2 10 53,Id 8 10 41,Id 13 10 15,Id 5 10 59
+Id 7 11 72,Id 9 11 43,Id 13 11 30,Id 2 11 64,Id 8 11 99,Id 10 11 24,Id 5 11 63,Id 6 11 14,Id 14 11 77,Id 12 11 65,Id 11 11 5,Id 3 11 27,Id 1 11 70,Id 4 11 54,Id 15 11 1
+Id 14 12 50,Id 1 12 31,Id 12 12 28,Id 4 12 68,Id 11 12 94,Id 3 12 52,Id 15 12 20,Id 9 12 68,Id 7 12 14,Id 13 12 71,Id 10 12 73,Id 2 12 51,Id 8 12 23,Id 6 12 30,Id 5 12 48
+Id 9 13 83,Id 7 13 4,Id 10 13 90,Id 13 13 22,Id 2 13 96,Id 5 13 45,Id 6 13 60,Id 14 13 18,Id 1 13 59,Id 3 13 66,Id 4 13 1,Id 11 13 66,Id 12 13 5,Id 15 13 74,Id 8 13 38
+Id 15 14 33,Id 3 14 13,Id 4 14 41,Id 12 14 43,Id 13 14 66,Id 10 14 21,Id 8 14 31,Id 2 14 58,Id 6 14 81,Id 5 14 75,Id 14 14 88,Id 9 14 45,Id 11 14 34,Id 7 14 82,Id 1 14 62
+Id 15 15 55,Id 1 15 49,Id 12 15 36,Id 9 15 86,Id 4 15 70,Id 11 15 36,Id 3 15 29,Id 7 15 28,Id 13 15 2,Id 8 15 55,Id 2 15 22,Id 10 15 23,Id 6 15 34,Id 5 15 99,Id 14 15 63
+Id 13 16 94,Id 2 16 39,Id 8 16 2,Id 10 16 62,Id 5 16 100,Id 6 16 65,Id 14 16 64,Id 15 16 29,Id 1 16 9,Id 12 16 8,Id 3 16 25,Id 11 16 76,Id 7 16 45,Id 9 16 33,Id 4 16 80
+Id 1 17 65,Id 4 17 72,Id 11 17 13,Id 3 17 71,Id 9 17 42,Id 7 17 41,Id 12 17 33,Id 13 17 46,Id 10 17 42,Id 2 17 72,Id 8 17 63,Id 14 17 30,Id 5 17 61,Id 6 17 13,Id 15 17 53
+Id 10 18 61,Id 2 18 80,Id 14 18 45,Id 6 18 100,Id 5 18 15,Id 1 18 9,Id 15 18 52,Id 12 18 62,Id 7 18 39,Id 9 18 27,Id 4 18 44,Id 11 18 94,Id 3 18 25,Id 13 18 16,Id 8 18 21
+Id 9 19 32,Id 11 19 40,Id 12 19 18,Id 7 19 86,Id 13 19 7,Id 2 19 74,Id 8 19 95,Id 10 19 21,Id 14 19 6,Id 5 19 20,Id 6 19 15,Id 15 19 64,Id 1 19 34,Id 4 19 34,Id 3 19 61
+Id 5 20 63,Id 1 20 29,Id 3 20 98,Id 4 20 36,Id 9 20 91,Id 11 20 77,Id 7 20 80,Id 12 20 23,Id 13 20 3,Id 2 20 3,Id 8 20 8,Id 10 20 32,Id 14 20 74,Id 6 20 29,Id 15 20 96,

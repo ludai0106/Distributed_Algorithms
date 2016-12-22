@@ -11,12 +11,14 @@ public class Message implements Serializable {
 	private char type;
 	private int w;
 	private int round;
+	private int senderId;
 
 	// (N,r,w)
-	public Message(char type, int round, int w) {
+	public Message(char type, int round, int w, int senderId) {
 		this.type = type;
 		this.w = w;
 		this.round = round;
+		this.senderId = senderId;
 	}
 
 	public char getType() {
