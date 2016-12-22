@@ -14,6 +14,7 @@ public class CTest {
 	static boolean easyMode = false;
 
 	static int networkSize = 6;
+
 	static int rPort = 1099;
 	static int f = 1;
 	static boolean traitorRandomMessage = true;
@@ -21,6 +22,7 @@ public class CTest {
 	static int delay = 0;
 	static boolean synchronous = true;
 	static ArrayList<String> remoteIps = new ArrayList<>();
+
 
 	private CTest() {
 	}
@@ -36,6 +38,7 @@ public class CTest {
 			delay = 0;
 		}
 
+
 		remoteIps.add("145.94.211.226");
 		remoteIps.add("145.94.183.254");
 
@@ -45,6 +48,7 @@ public class CTest {
 				int nodeId = 1000 + i - networkSize / 2;
 				Node node;
 				if (i <= networkSize - f) {
+
 					node = new Node(nodeId, f, randomNumber(0, 1), true, networkSize, rPort, traitorRandomMessage,
 							traitorDoNotSendMessage, delay, i, synchronous, remoteIps);
 				} else {
@@ -69,6 +73,22 @@ public class CTest {
 				// traitor
 				node = new Node(nodeId, f, 0, false, networkSize, rPort, traitorRandomMessage, traitorDoNotSendMessage,
 						delay, i, synchronous, remoteIps);
+			}
+			node.notifyOthers();
+			System.out.println(node.getNodeId() + ":\tWaiting for the incoming messages...");
+		}
+		else if(args.length == 3){
+			int nodeId = 1000+ Integer.parseInt(args[0]);
+			int networkSize =  Integer.parseInt(args[2]);
+			Node node;
+			if(args[1]=="1"){
+				 node = new Node(nodeId, f, randomNumber(0, 1), true, networkSize, rPort, traitorRandomMessage,
+						traitorDoNotSendMessage, delay, Integer.parseInt(args[0]), synchronous, remoteIps);
+			}
+			else{
+				//traitor
+				node = new Node(nodeId, f, 0, false, networkSize, rPort, traitorRandomMessage,
+						traitorDoNotSendMessage, delay, Integer.parseInt(args[0]), synchronous, remoteIps);
 			}
 			node.notifyOthers();
 			System.out.println(node.getNodeId() + ":\tWaiting for the incoming messages...");

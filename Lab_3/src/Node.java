@@ -133,7 +133,9 @@ public class Node extends UnicastRemoteObject implements INode {
 			thread = new Thread(byzan);
 			thread.start();
 		}
+
 		// System.out.println(this.nodeId + " quit regsiterNode ");
+
 	}
 
 	// notify the rest about you
@@ -146,7 +148,8 @@ public class Node extends UnicastRemoteObject implements INode {
 		for (String nodeName : nodes) {
 			INode remoteNode = getRemoteNode(nodeName);
 			remoteNode.registerNode();
-			System.out.println(this.getNodeId() + ":\tNotified node: " + nodeName);
+			// System.out.println(this.getNodeId() + ":\t Notified node: " +
+			// nodeName);
 
 			// if (this.getClock().getIndex() == this.getSize())
 			// System.out.println(this.getNodeId() + ": I register" +
@@ -166,6 +169,7 @@ public class Node extends UnicastRemoteObject implements INode {
 		INode remoteNode = (INode) this.registries.get(remoteIp).lookup(nodeStringId);
 
 		// System.out.println(this.nodeId + " quit getRemoteNode ");
+
 		return remoteNode;
 	}
 
@@ -175,14 +179,17 @@ public class Node extends UnicastRemoteObject implements INode {
 		// If we have enough Nodes in our Links
 		int flag = 0;
 		if (this.getLinks().size() >= size) {
+
 			for (String node : this.getLinks()) {
-				
+
 				Random randomGenerator = new Random();
 				randomDelay();
 				// if not a traitor
 				if (!this.isTraitor()) {
 					getRemoteNode(node).receiveMessage(m);
+
 					System.out.println("HERE!");
+
 				} else if (!traitorDoNotSendMessage) {// if a traitor then may
 					// not send message,
 					// here we
@@ -199,12 +206,16 @@ public class Node extends UnicastRemoteObject implements INode {
 					}
 				}
 				flag++;
-				System.out.println(getNodeId() + "Send one, and alread "+flag+"\t to"+node);
+
+				System.out.println(getNodeId() + "Send one, and alread " + flag + "\t to" + node);
+
 			}
 		} else {
 			System.out.println("Error: Not engouht Nodes in the Links");
 		}
+
 		// System.out.println(this.nodeId + " quit broadCast ");
+
 	}
 
 	// Create a random number between [min, max]
@@ -221,7 +232,9 @@ public class Node extends UnicastRemoteObject implements INode {
 				break;
 			} else {
 				Thread.sleep(200);
+
 				System.out.println(countMessage(type, round) + " " + (this.getSize() - this.getfNumber()));
+
 			}
 		}
 
@@ -230,6 +243,7 @@ public class Node extends UnicastRemoteObject implements INode {
 	// TODO:
 	public boolean waitUntilSameRound() throws AccessException, RemoteException, NotBoundException {
 		// System.out.println(this.nodeId + " enter waitUntilSameRound ");
+
 		// Now we need to make sure we are slower than others
 		boolean result = true;
 		for (String node : links) {
@@ -237,13 +251,17 @@ public class Node extends UnicastRemoteObject implements INode {
 			if (!result)
 				return false;
 		}
+
 		// System.out.println(this.nodeId + " quit waitUntilSameRound ");
+
 		return result;
 
 	}
 
 	public void broadcastClock() throws AccessException, RemoteException, NotBoundException {
+
 		// System.out.println(this.nodeId + " enter broadcastClock ");
+
 		int flag = 0;
 		for (String node : links) {
 			if (!node.equals(this.getNodeId())) {
@@ -260,6 +278,7 @@ public class Node extends UnicastRemoteObject implements INode {
 		}
 		System.out.println(this.getNodeId() + ": already sent" + flag);
 		// System.out.println(this.nodeId + " quit broadcastClock ");
+
 	}
 
 	public synchronized void receiveClock(Clock c) throws RemoteException {
@@ -422,6 +441,7 @@ public class Node extends UnicastRemoteObject implements INode {
 		int nodeIndex = 0;
 		for (int i = 0; i < remoteIps.size(); i++) {
 			for (String nodeName : this.registries.get(i).list()) {
+
 				nodes[nodeIndex] = nodeName;
 				nodeIndex++;
 			}

@@ -44,7 +44,9 @@ public class Byzantine implements Runnable {
 				// broadcast(N;r,v)
 
 				// if (node.getClock().getIndex() + 1 == node.getSize())
-				System.out.println(node.getNodeId() + ": I enter while");
+
+//				System.out.println(node.getNodeId() + ": I enter while");
+
 				int round = node.getRound();
 				int value = node.getValue();
 				int f = node.getfNumber();
@@ -147,7 +149,7 @@ public class Byzantine implements Runnable {
 
 							}
 						}
-						node.clockList.clear();
+
 						// Now it's time to break
 						while (!node.waitUntilSameRound()) {
 							Thread.sleep(200);
