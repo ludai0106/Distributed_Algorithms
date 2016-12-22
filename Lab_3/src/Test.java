@@ -19,7 +19,7 @@ public class Test {
 	static int f = 3;
 	static boolean traitorRandomMessage = true;
 	static boolean traitorDoNotSendMessage = false;
-	static int delay = 0;
+	static int delay = 100;
 	static boolean synchronous = true;
 
 	public static void main(String args[]) throws AlreadyBoundException, NotBoundException, IOException {

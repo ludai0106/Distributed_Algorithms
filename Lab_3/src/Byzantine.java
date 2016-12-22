@@ -80,11 +80,14 @@ public class Byzantine implements Runnable {
 
 					Message mP = new Message(P, round, randomNumber(0, 100), pureId);
 					node.broadCast(mP);
-					if (countRow("result") == node.getSize() - 1 || countRow("result") > node.getSize())
-						writeCSV("Id" +" "+ pureId + " " + round + " " + Integer.toString(mP.getW()), "result", true, true);
-					else
-						writeCSV("Id" +" "+ pureId + " " + round + " " + Integer.toString(mP.getW()), "result", true,
-								false);
+					if (!node.getDecided()) {
+						if (countRow("result") == node.getSize() - 1 || countRow("result") > node.getSize())
+							writeCSV("Id" + " " + pureId + " " + round + " " + Integer.toString(mP.getW()), "result",
+									true, true);
+						else
+							writeCSV("Id" + " " + pureId + " " + round + " " + Integer.toString(mP.getW()), "result",
+									true, false);
+					}
 				}
 
 				// if decided then STOP
@@ -109,6 +112,11 @@ public class Byzantine implements Runnable {
 					if (node.countMessage(P, round, value) > 3.0 * f) {
 						// decide w; decide true
 						node.setDecided(true);
+						if (node.getClock().getIndex() == node.getSize() - 1) {
+							writeCSV(" ", "result", true, true);
+							writeCSV("Round", Integer.toString(round), "result", true, true);
+							writeCSV("FinalValue", Integer.toString(value), "result", true, true);
+						}
 						node.decideAnounce();
 					}
 				}
@@ -182,6 +190,29 @@ public class Byzantine implements Runnable {
 		FileWriter pw = new FileWriter(csv, addMoreLine);
 
 		pw.append(value);
+		// If not last , if last then we
+		if (!last) {
+			pw.append(",");
+		} else {
+			pw.append("\n");
+		}
+		pw.flush();
+		pw.close();
+
+		return csv;
+
+	}
+
+	public static String writeCSV(String value1, String value2, String csvFileName, boolean addMoreLine, boolean last)
+			throws IOException {
+		String Path = Paths.get(".").toAbsolutePath().normalize().toString();
+		String csv = Path + "/" + csvFileName + ".csv";
+
+		FileWriter pw = new FileWriter(csv, addMoreLine);
+
+		pw.append(value1);
+		pw.append(",");
+		pw.append(value2);
 		// If not last , if last then we
 		if (!last) {
 			pw.append(",");
