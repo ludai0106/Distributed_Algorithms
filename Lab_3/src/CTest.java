@@ -23,7 +23,6 @@ public class CTest {
 	static boolean synchronous = true;
 	static ArrayList<String> remoteIps = new ArrayList<>();
 
-
 	private CTest() {
 	}
 
@@ -37,7 +36,6 @@ public class CTest {
 			traitorDoNotSendMessage = false;
 			delay = 0;
 		}
-
 
 		remoteIps.add("145.94.211.226");
 		remoteIps.add("145.94.183.254");
@@ -77,22 +75,7 @@ public class CTest {
 			node.notifyOthers();
 			System.out.println(node.getNodeId() + ":\tWaiting for the incoming messages...");
 		}
-		else if(args.length == 3){
-			int nodeId = 1000+ Integer.parseInt(args[0]);
-			int networkSize =  Integer.parseInt(args[2]);
-			Node node;
-			if(args[1]=="1"){
-				 node = new Node(nodeId, f, randomNumber(0, 1), true, networkSize, rPort, traitorRandomMessage,
-						traitorDoNotSendMessage, delay, Integer.parseInt(args[0]), synchronous, remoteIps);
-			}
-			else{
-				//traitor
-				node = new Node(nodeId, f, 0, false, networkSize, rPort, traitorRandomMessage,
-						traitorDoNotSendMessage, delay, Integer.parseInt(args[0]), synchronous, remoteIps);
-			}
-			node.notifyOthers();
-			System.out.println(node.getNodeId() + ":\tWaiting for the incoming messages...");
-		}
+
 	}
 
 	// Create a random number between min and max. [min,max]
