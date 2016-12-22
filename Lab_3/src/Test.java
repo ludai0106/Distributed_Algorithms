@@ -12,15 +12,15 @@ public class Test {
 	static boolean easyMode = false;
 
 	//You can assign initial value by yourSelf
-	static boolean forceAssign = true;
+	static boolean forceAssign = false;
 	
-	static int networkSize = 15;
+	static int networkSize = 51;
 	static int rPort = 1099;
-	static int f = 3;
+	static int f = 10;
 	static boolean traitorRandomMessage = true;
 	static boolean traitorDoNotSendMessage = false;
 	static int delay = 100;
-	static boolean synchronous = true;
+	static boolean synchronous = false;
 
 	public static void main(String args[]) throws AlreadyBoundException, NotBoundException, IOException {
 		// Configurations for easyMode

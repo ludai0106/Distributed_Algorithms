@@ -38,7 +38,7 @@ public class Align {
 				} else {
 					for (int i = 0; i < Shit.length; i++) {
 						pw.append(Shit[i]);
-						System.out.print("i = " + i + "\t");
+//						System.out.print("i = " + i + "\t");
 
 						if (checkSameRound(Shit, ShitForward, i)) {
 							pw.append(",");
@@ -48,8 +48,8 @@ public class Align {
 					}
 				}
 
-				System.out.println("Line=" + line);
-				System.out.println("Forward=" + lineForward);
+//				System.out.println("Line=" + line);
+//				System.out.println("Forward=" + lineForward);
 
 				// count = Shit.length;
 
@@ -61,6 +61,7 @@ public class Align {
 
 		pw.flush();
 		pw.close();
+		System.out.println("Align now");
 
 	}
 
@@ -68,7 +69,7 @@ public class Align {
 		if (i <= s1.length - 2 && i >= 0) {
 			String[] newSi = s1[i].split(" ");
 			String[] newSiplus = s1[i + 1].split(" ");
-			System.out.println(newSi[2] + " | " + newSiplus[2]);
+//			System.out.println(newSi[2] + " | " + newSiplus[2]);
 			return (newSi[2].equals(newSiplus[2])) ? true : false;
 
 		} else if (i == s1.length - 1) {
@@ -76,7 +77,7 @@ public class Align {
 			String[] newSiplus = s2[0].split(" ");
 			if (newSiplus.length <= 3)
 				return false;
-			System.out.println("New Line: " + newSi[2] + " | " + newSiplus[2]);
+//			System.out.println("New Line: " + newSi[2] + " | " + newSiplus[2]);
 			return (newSi[2].equals(newSiplus[2])) ? true : false;
 		}
 		return false;

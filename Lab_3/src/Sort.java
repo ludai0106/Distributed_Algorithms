@@ -31,8 +31,8 @@ public class Sort {
 					sort(Shit);
 					for (int i = 0; i < Shit.length; i++) {
 						pw.append(Shit[i].split(" ")[3]);
-						
-//						pw.append(Shit[i]);
+
+						// pw.append(Shit[i]);
 						if (i < Shit.length - 1) {
 							pw.append(",");
 						} else {
@@ -48,6 +48,7 @@ public class Sort {
 		}
 		pw.flush();
 		pw.close();
+		System.out.println("Sorted!");
 	}
 
 	public static void sort(String[] s) {
