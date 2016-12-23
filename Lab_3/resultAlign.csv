@@ -1773,4 +1773,103 @@ Id 7 36 24,Id 5 36 90,Id 13 36 59,Id 14 36 39,Id 15 36 71,Id 8 36 25,Id 10 36 78
 Id 5 37 65,Id 7 37 73,Id 13 37 1,Id 8 37 1,Id 16 37 99,Id 10 37 81,Id 6 37 79,Id 3 37 90,Id 14 37 31,Id 15 37 58,Id 11 37 47,Id 4 37 54,Id 2 37 3,Id 12 37 59,Id 1 37 14,Id 9 37 66
 Id 5 38 97,Id 6 38 75,Id 8 38 68,Id 3 38 19,Id 14 38 38,Id 7 38 0,Id 13 38 23,Id 10 38 73,Id 15 38 39,Id 4 38 16,Id 11 38 79,Id 16 38 2,Id 12 38 58,Id 1 38 88,Id 9 38 60,Id 2 38 64
 Id 3 39 46,Id 5 39 67,Id 6 39 2,Id 7 39 93,Id 15 39 37,Id 13 39 30,Id 14 39 100,Id 10 39 94,Id 16 39 56,Id 8 39 37,Id 11 39 45,Id 4 39 41,Id 1 39 93,Id 12 39 46,Id 9 39 92,Id 2 39 76
-Id 3 40 51,Id 6 40 35,Id 5 40 39,Id 7 40 18,Id 14 40 5,Id 13 40 86,Id 11 40 26,Id 8 40 8,Id 16 40 76,Id 10 40 56,Id 15 40 46,Id 4 40 98,Id 9 40 4,Id 2 40 91,Id 1 40 15,Id 12 40 52,
+Id 3 40 51,Id 6 40 35,Id 5 40 39,Id 7 40 18,Id 14 40 5,Id 13 40 86,Id 11 40 26,Id 8 40 8,Id 16 40 76,Id 10 40 56,Id 15 40 46,Id 4 40 98,Id 9 40 4,Id 2 40 91,Id 1 40 15,Id 12 40 52
+networkSize,f,delay,traitorRandomMessage,traitorDoNotSendMessage,synchronous
+11,3,100,true,false,false
+1,2,3,4,5,6,7,8,9,10,11
+true,true,true,true,true,true,true,true,false,false,false
+0,0,1,1,0,1,1,1,0,0,0
+Id 9 1 34,Id 11 1 10,Id 10 1 60,Id 2 1 69,Id 3 1 26,Id 4 1 2,Id 7 1 8,Id 1 1 64,Id 5 1 69,Id 8 1 77,Id 6 1 48
+Id 2 2 24,Id 3 2 6,Id 4 2 33,Id 9 2 44,Id 11 2 52,Id 5 2 37,Id 10 2 62,Id 7 2 70,Id 8 2 55,Id 1 2 83,Id 6 2 33
+Id 3 3 98,Id 9 3 50,Id 4 3 91,Id 10 3 48,Id 2 3 65,Id 11 3 38,Id 5 3 1,Id 7 3 68,Id 8 3 7,Id 1 3 60,Id 6 3 14
+Id 3 4 87,Id 9 4 94,Id 4 4 76,Id 5 4 98,Id 2 4 76,Id 10 4 83,Id 8 4 48,Id 1 4 36,Id 7 4 79,Id 11 4 61,Id 6 4 87
+Id 3 5 24,Id 2 5 20,Id 10 5 9,Id 9 5 96,Id 11 5 11,Id 4 5 75,Id 8 5 82,Id 5 5 42,Id 1 5 40,Id 7 5 19,Id 6 5 68
+Id 2 6 49,Id 3 6 33,Id 10 6 10,Id 8 6 67,Id 11 6 99,Id 4 6 39,Id 9 6 4,Id 5 6 78,Id 7 6 60,Id 6 6 59,Id 1 6 18
+Id 2 7 78,Id 3 7 19,Id 10 7 63,Id 8 7 13,Id 9 7 75,Id 7 7 3,Id 6 7 17,Id 11 7 59,Id 4 7 53,Id 1 7 52,Id 5 7 40
+Id 3 8 39,Id 2 8 21,Id 7 8 76,Id 9 8 66,Id 10 8 22,Id 8 8 44,Id 11 8 6,Id 6 8 59,Id 4 8 42,Id 1 8 10,Id 5 8 70
+Id 10 9 38,Id 2 9 77,Id 3 9 41,Id 9 9 67,Id 7 9 78,Id 4 9 78,Id 11 9 15,Id 8 9 10,Id 6 9 55,Id 5 9 66,Id 1 9 98
+Id 3 10 36,Id 2 10 21,Id 10 10 44,Id 9 10 54,Id 4 10 47,Id 11 10 32,Id 7 10 61,Id 6 10 63,Id 8 10 62,Id 1 10 36,Id 5 10 8
+Id 2 11 1,Id 3 11 42,Id 9 11 95,Id 7 11 78,Id 10 11 95,Id 4 11 91,Id 11 11 8,Id 6 11 41,Id 8 11 11,Id 5 11 63,Id 1 11 81
+Id 3 12 60,Id 2 12 29,Id 4 12 52,Id 10 12 76,Id 9 12 29,Id 7 12 90,Id 5 12 85,Id 11 12 92,Id 1 12 73,Id 6 12 75
+Id 2 13 18,Id 4 13 10,Id 3 13 27,Id 11 13 37,Id 7 13 27,Id 10 13 50,Id 9 13 1,Id 5 13 20,Id 6 13 60,Id 8 13 98,Id 1 13 98
+Id 3 14 54,Id 11 14 78,Id 2 14 95,Id 5 14 74,Id 10 14 54,Id 9 14 31,Id 4 14 22,Id 7 14 33,Id 1 14 13,Id 6 14 52,Id 8 14 28
+networkSize,f,delay,traitorRandomMessage,traitorDoNotSendMessage,synchronous
+10,2,100,true,false,false
+1,2,3,4,5,6,7,8,9,10
+true,true,true,true,true,true,true,true,false,false
+0,0,0,1,0,0,0,1,0,0
+Id 9 1 38,Id 10 1 78,Id 8 1 53,Id 4 1 76,Id 7 1 63,Id 2 1 37,Id 5 1 86,Id 3 1 57,Id 1 1 99,Id 6 1 93
+Id 4 2 37,Id 2 2 99,Id 10 2 96,Id 9 2 80,Id 7 2 58,Id 8 2 69,Id 3 2 75,Id 5 2 1,Id 1 2 42,Id 6 2 56
+Id 4 3 68,Id 10 3 26,Id 2 3 67,Id 7 3 23,Id 9 3 54,Id 6 3 50,Id 5 3 51,Id 8 3 14,Id 1 3 69,Id 3 3 18
+Id 2 4 89,Id 4 4 59,Id 7 4 11,Id 5 4 16,Id 8 4 44,Id 6 4 84,Id 1 4 10,Id 9 4 18,Id 10 4 47,Id 3 4 52
+Id 4 5 47,Id 5 5 92,Id 2 5 44,Id 8 5 63,Id 9 5 67,Id 10 5 69,Id 7 5 83,Id 6 5 99,Id 3 5 98,Id 1 5 26
+Id 2 6 72,Id 4 6 13,Id 9 6 24,Id 10 6 7,Id 5 6 47,Id 6 6 92,Id 7 6 33,Id 8 6 30,Id 3 6 71,Id 1 6 76
+Id 2 7 90,Id 4 7 52,Id 9 7 48,Id 5 7 99,Id 6 7 45,Id 7 7 54,Id 10 7 30,Id 8 7 84,Id 1 7 73,Id 3 7 90
+Id 2 8 64,Id 4 8 71,Id 6 8 34,Id 5 8 57,Id 9 8 55,Id 10 8 72,Id 8 8 7,Id 7 8 85,Id 1 8 3,Id 3 8 72
+Id 2 9 66,Id 5 9 29,Id 9 9 70,Id 4 9 67,Id 10 9 74,Id 8 9 33,Id 7 9 40,Id 6 9 71,Id 3 9 5,Id 1 9 37
+Id 4 10 31,Id 5 10 77,Id 9 10 89,Id 2 10 58,Id 6 10 92,Id 3 10 98,Id 8 10 37,Id 7 10 14,Id 10 10 72,Id 1 10 62
+Id 4 11 98,Id 2 11 75,Id 3 11 32,Id 6 11 66,Id 9 11 61,Id 5 11 72,Id 10 11 92,Id 8 11 46,Id 7 11 57,Id 1 11 57
+Id 2 12 56,Id 10 12 65,Id 3 12 41,Id 9 12 84,Id 4 12 30,Id 6 12 21,Id 5 12 25,Id 7 12 1,Id 8 12 63,Id 1 12 43
+Id 2 13 23,Id 9 13 86,Id 3 13 1,Id 4 13 20,Id 10 13 74,Id 6 13 64,Id 7 13 82,Id 5 13 82,Id 8 13 74,Id 1 13 81
+Id 2 14 51,Id 3 14 17,Id 4 14 57,Id 10 14 93,Id 7 14 87,Id 9 14 55,Id 5 14 81,Id 6 14 28,Id 1 14 32,Id 8 14 27
+Id 2 15 33,Id 3 15 4,Id 4 15 52,Id 8 15 44,Id 7 15 11,Id 10 15 18,Id 6 15 33,Id 5 15 60,Id 9 15 91,Id 1 15 10
+Id 3 16 77,Id 2 16 77,Id 4 16 6,Id 7 16 4,Id 6 16 52,Id 8 16 55,Id 10 16 48,Id 9 16 81,Id 5 16 73,Id 1 16 10
+Id 2 17 1,Id 4 17 98,Id 3 17 42,Id 9 17 2,Id 10 17 43,Id 7 17 66,Id 5 17 34,Id 8 17 13,Id 6 17 14,Id 1 17 14
+Id 2 18 90,Id 3 18 99,Id 10 18 89,Id 4 18 89,Id 7 18 70,Id 8 18 54,Id 9 18 65,Id 5 18 87,Id 6 18 63,Id 1 18 32
+Id 2 19 27,Id 4 19 38,Id 3 19 60,Id 5 19 71,Id 9 19 47,Id 7 19 95,Id 10 19 23,Id 6 19 87,Id 8 19 92,Id 1 19 29
+Id 5 20 24,Id 2 20 75,Id 3 20 76,Id 4 20 69,Id 7 20 3,Id 9 20 10,Id 10 20 9,Id 6 20 99,Id 8 20 34,Id 1 20 66
+Id 2 21 51,Id 4 21 58,Id 10 21 29,Id 9 21 31,Id 3 21 70,Id 5 21 66,Id 7 21 31,Id 8 21 6,Id 6 21 58,Id 1 21 55
+Id 2 22 84,Id 10 22 88,Id 3 22 33,Id 4 22 79,Id 9 22 96,Id 5 22 83,Id 7 22 58,Id 8 22 100,Id 6 22 61,Id 1 22 74
+Id 2 23 65,Id 3 23 32,Id 5 23 79,Id 9 23 37,Id 4 23 84,Id 7 23 88,Id 1 23 88,Id 10 23 17,Id 6 23 56,Id 8 23 41
+Id 2 24 21,Id 5 24 39,Id 4 24 7,Id 3 24 63,Id 9 24 18,Id 10 24 78,Id 7 24 97,Id 8 24 89,Id 1 24 25,Id 6 24 91
+Id 2 25 91,Id 4 25 100,Id 7 25 12,Id 5 25 39,Id 10 25 66,Id 3 25 44,Id 8 25 87,Id 6 25 88,Id 9 25 0,Id 1 25 18
+Id 4 26 75,Id 2 26 83,Id 10 26 90,Id 9 26 50,Id 5 26 92,Id 7 26 40,Id 8 26 49,Id 6 26 65,Id 3 26 76,Id 1 26 84
+Id 2 27 43,Id 5 27 62,Id 7 27 72,Id 4 27 22,Id 6 27 29,Id 9 27 61,Id 10 27 87,Id 8 27 74,Id 3 27 21,Id 1 27 35
+Id 5 28 25,Id 10 28 3
+Round,29
+FinalValue,0
+ 
+ 
+networkSize,f,delay,traitorRandomMessage,traitorDoNotSendMessage,synchronous
+10,2,100,true,false,false
+1,2,3,4,5,6,7,8,9,10
+true,true,true,true,true,true,true,true,false,false
+1,1,1,1,1,0,0,1,0,0
+Id 9 1 34,Id 4 1 78,Id 5 1 24,Id 10 1 34,Id 6 1 91,Id 8 1 68,Id 7 1 88,Id 3 1 74,Id 1 1 68,Id 2 1 48
+Id 5 2 5,Id 4 2 91,Id 7 2 99,Id 10 2 47,Id 9 2 20,Id 3 2 12,Id 8 2 52,Id 1 2 24,Id 2 2 71,Id 6 2 76
+Id 4 3 100,Id 5 3 66,Id 3 3 83,Id 7 3 45,Id 1 3 10,Id 10 3 76,Id 9 3 16,Id 6 3 86,Id 8 3 16,Id 2 3 55
+Id 4 4 0,Id 3 4 14,Id 5 4 12,Id 9 4 48,Id 7 4 6,Id 8 4 27,Id 10 4 33,Id 1 4 46,Id 6 4 58,Id 2 4 1
+Id 3 5 34,Id 5 5 15,Id 4 5 85,Id 8 5 17,Id 9 5 73,Id 10 5 52,Id 7 5 28,Id 6 5 43,Id 1 5 90,Id 2 5 66
+Id 3 6 3,Id 5 6 98,Id 4 6 59,Id 10 6 59,Id 8 6 12,Id 7 6 7,Id 9 6 91,Id 6 6 96,Id 1 6 47,Id 2 6 42
+Id 3 7 59,Id 4 7 21,Id 5 7 51,Id 6 7 76,Id 9 7 33,Id 8 7 91,Id 7 7 32,Id 1 7 21,Id 2 7 55
+Id 3 8 86,Id 6 8 92,Id 5 8 59,Id 10 8 73,Id 4 8 48,Id 9 8 1,Id 7 8 96,Id 2 8 63,Id 1 8 36,Id 8 8 79
+Id 3 9 14,Id 6 9 60,Id 9 9 38,Id 8 9 67,Id 5 9 31,Id 10 9 45,Id 4 9 58,Id 7 9 100,Id 1 9 86,Id 2 9 79
+Id 3 10 50,Id 6 10 78,Id 5 10 14,Id 9 10 68,Id 4 10 13,Id 8 10 20,Id 1 10 47,Id 10 10 35,Id 2 10 10,Id 7 10 27
+Id 9 11 28,Id 10 11 13
+Round,11
+FinalValue,0
+Id 8 11 74
+networkSize,f,delay,traitorRandomMessage,traitorDoNotSendMessage,synchronous
+5,1,100,true,false,false
+1,2,3,4,5
+true,true,true,true,false
+1,0,1,1,0
+Id 3 1 96,Id 5 1 93,Id 4 1 59,Id 1 1 76,Id 2 1 73
+Id 3 2 61,Id 5 2 49,Id 4 2 44,Id 2 2 41,Id 1 2 14
+Id 2 3 42,Id 3 3 97,Id 5 3 0,Id 4 3 34,Id 1 3 31
+Id 2 4 51,Id 3 4 100,Id 4 4 76,Id 5 4 92,Id 1 4 87
+ 
+Round,5
+FinalValue,1
+ 
+networkSize,f,delay,traitorRandomMessage,traitorDoNotSendMessage,synchronous
+11,2,100,true,false,false
+1,2,3,4,5,6,7,8,9,10,11
+true,true,true,true,true,true,true,true,true,false,false
+0,0,1,0,0,0,1,1,0,0,0
+Id 4 1 34,Id 3 1 0,Id 10 1 80,Id 5 1 82,Id 6 1 66,Id 2 1 0,Id 8 1 42,Id 11 1 84,Id 7 1 85,Id 9 1 39,Id 1 1 88
+Id 4 2 62,Id 5 2 92,Id 3 2 23,Id 2 2 38,Id 8 2 61,Id 11 2 75,Id 10 2 13,Id 7 2 78,Id 9 2 87,Id 6 2 3,Id 1 2 29
+Id 3 3 88,Id 10 3 48,Id 4 3 83,Id 11 3 43,Id 8 3 94,Id 5 3 58,Id 2 3 9,Id 9 3 0,Id 7 3 48,Id 6 3 69,Id 1 3 17
+Id 3 4 67
+Round,4
+FinalValue,1
