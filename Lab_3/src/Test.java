@@ -14,9 +14,9 @@ public class Test {
 	//You can assign initial value by yourSelf
 	static boolean forceAssign = false;
 	
-	static int networkSize = 51;
+	static int networkSize = 16;
 	static int rPort = 1099;
-	static int f = 10;
+	static int f = 4;
 	static boolean traitorRandomMessage = true;
 	static boolean traitorDoNotSendMessage = false;
 	static int delay = 100;
